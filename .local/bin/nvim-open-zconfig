@@ -1,0 +1,5 @@
+#!/bin/bash/
+
+nvim-open /home/alex/.zshrc
+nvim-open /home/alex/.zshenv
+nvim-open /home/alex/.custom-aliases

@@ -1,0 +1,5 @@
+#!/bin/bash
+##keeps kitty in a single process for performancew
+
+
+exec /usr/bin/kitty -1 "$@"

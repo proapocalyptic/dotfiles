@@ -1,0 +1,8 @@
+#!/bin/bash
+if ! pgrep -i obsidian > /dev/null; then
+  obsidian > /dev/null 2>&1 &
+  until obsidian files &>/dev/null; do sleep 0.2; done
+fi
+unique=$(obsidian unique) && sleep 0.4
+xdg-open "obsidian://open?vault=Obsidian&file=$unique&paneType=window"
+hyprctl dispatch 'hl.dsp.window.tag({ tag = "quicknote" })'

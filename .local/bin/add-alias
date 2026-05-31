@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# add-alias: interactively add an alias to ~/.custom-aliases
+
+ALIAS_FILE="${ALIAS_FILE:-$HOME/.custom-aliases}"
+
+# Ensure the file exists
+touch "$ALIAS_FILE"
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+die() { echo "error: $*" >&2; exit 1; }
+
+# Validate that input looks like a well-formed alias statement.
+# Accepts both:
+#   alias foo='bar'
+#   foo='bar'          (bare form — 'alias' prefix is added automatically)
+validate_alias() {
+    local input="$1"
+
+    # Strip leading 'alias ' if present for uniform handling
+    local bare="${input#alias }"
+
+    # Must match: name='...' or name="..." or name=word
+    # Name: starts with letter/underscore, alphanumeric/underscore/hyphen only
+    if ! echo "$bare" | grep -qP '^[a-zA-Z_][a-zA-Z0-9_-]*=.+'; then
+        echo "  Syntax looks wrong. Expected: name='command' or alias name='command'"
+        return 1
+    fi
+
+    # Extract just the name part for duplicate checking
+    local alias_name
+    alias_name="$(echo "$bare" | cut -d= -f1)"
+
+    if grep -q "^alias ${alias_name}=" "$ALIAS_FILE" 2>/dev/null; then
+        echo "  '$alias_name' is already defined in $ALIAS_FILE"
+        echo -n "  Overwrite? [y/N] "
+        read -r overwrite
+        if [[ "$overwrite" =~ ^[Yy]$ ]]; then
+            # Remove the existing line
+            sed -i "/^alias ${alias_name}=/d" "$ALIAS_FILE"
+        else
+            return 1
+        fi
+    fi
+
+    return 0
+}
+
+normalize_alias() {
+    local input="$1"
+    # Ensure it starts with 'alias '
+    if [[ "$input" != alias\ * ]]; then
+        echo "alias $input"
+    else
+        echo "$input"
+    fi
+}
+
+# ── Main ─────────────────────────────────────────────────────────────────────
+
+echo "Adding alias to: $ALIAS_FILE"
+echo "  Format: name='command'  or  alias name='command'"
+echo "  Leave blank and press Enter to cancel."
+echo
+
+while true; do
+    echo -n "Alias: "
+    read -r input
+
+    # Blank input = cancel
+    [[ -z "$input" ]] && echo "Cancelled." && exit 0
+
+    if validate_alias "$input"; then
+        break
+    fi
+done
+
+entry="$(normalize_alias "$input")"
+
+# Append with a newline guard (ensure file ends with newline before appending)
+[[ -s "$ALIAS_FILE" ]] && tail -c1 "$ALIAS_FILE" | read -r _ || true
+echo "$entry" >> "$ALIAS_FILE"
+
+echo "  Added: $entry"
+echo
+
+# Optional: source the file in the current shell
+# This only works if the script is sourced itself (. add-alias), not run as a subprocess.
+# Instead, we just remind the user.
+echo "To activate now, run:"
+echo "  source $ALIAS_FILE"

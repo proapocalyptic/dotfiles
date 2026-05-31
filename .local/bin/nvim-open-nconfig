@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for f in ${nconfig_list[@]}; do
+    echo "opening $f"
+    nvim-open "$f"
+    echo "exit code: $?"
+done

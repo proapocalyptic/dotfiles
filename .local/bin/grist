@@ -1,0 +1,8 @@
+
+#!/bin/bash
+docker run  \
+-p 8484:8484 \
+-e GRIST_BOOT_KEY=52bddbad-a13e-4365-93a4-57887a5e73ab \
+-e GRIST_SANDBOX_FLAVOR=gvisor \
+-it gristlabs/grist
+

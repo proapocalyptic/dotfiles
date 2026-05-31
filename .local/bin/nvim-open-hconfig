@@ -1,0 +1,8 @@
+#!/bin/bash
+source ~/.config/edit-groups.zsh
+
+for f in ${hconfig_list[@]}; do
+    echo "opening $f"
+    nvim-open "$f"
+    echo "exit code: $?"
+done

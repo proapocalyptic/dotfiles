@@ -1,0 +1,21 @@
+#!/bin/bash
+
+[[ "$1" == "--" ]] && shift
+[[ -z "$1" ]] && { echo "use it liket tis: nvim-open <file>" >&2; exit 1; }
+# Resolve to absolute path so --remote-silent works regardless of cwd
+file="$(realpath --canonicalize-missing "$1")"
+
+if [ -S /tmp/nvim.sock ]; then
+    hyprctl dispatch 'hl.dsp.focus({ window = "class:kitty-nvim" })' &
+    disown
+    nvim --server /tmp/nvim.sock --remote-silent "$file"
+else
+    rm -f /tmp/nvim.sock
+    kitty --single-instance --instance-group nvim --detach --class kitty-nvim -e nvim --listen /tmp/nvim.sock
+    while [ ! -S /tmp/nvim.sock ]; do
+        sleep 0.1
+    done
+    nvim --server /tmp/nvim.sock --remote-silent "$file"
+    sleep 0.1
+    hyprctl dispatch 'hl.dsp.focus({ window = "class:kitty-nvim" })'
+fi

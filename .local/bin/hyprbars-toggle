@@ -1,0 +1,7 @@
+#!/bin/bash
+if hyprpm list | awk '/hyprbars/{found=1} found && /enabled/{print; exit}' | grep -q "true"; then
+    hyprpm disable hyprbars
+else
+    hyprpm enable hyprbars
+fi
+hyprctl reload

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# File paths
+SCAFFOLD_FILE="/home/alex/.config/hypr/hyprland.lua.scaffold"
+ACTIVE_FILE="/home/alex/.config/hypr/hyprland.lua"
+
+# Check which file currently exists and toggle
+if [ -f "$SCAFFOLD_FILE" ]; then
+    # If scaffold file exists, rename it to active file
+    mv "$SCAFFOLD_FILE" "$ACTIVE_FILE"
+    echo "Renamed hyprland.lua.scaffold to hyprland.lua"
+elif [ -f "$ACTIVE_FILE" ]; then
+    # If active file exists, rename it to scaffold file
+    mv "$ACTIVE_FILE" "$SCAFFOLD_FILE"
+    echo "Renamed hyprland.lua to hyprland.lua.scaffold"
+else
+    # Neither file exists
+    echo "Error: Neither hyprland.lua nor hyprland.lua.scaffold exists in /home/alex/.config/hypr/"
+    exit 1
+fi

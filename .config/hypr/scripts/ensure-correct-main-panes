@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#run in "boss" terminals to make them to make the correct panes 'master' for each workspace. ya dig?
+
+
+hyprctl dispatch layoutmsg swapwithmaster ignoremaster
+
