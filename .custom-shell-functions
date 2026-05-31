@@ -1,0 +1,83 @@
+#these are alex wolfe's custom shell functions. hey
+
+
+
+engage () { hyprctl dispatch "hl.dsp.exec_cmd([[$*]])"; }
+
+
+
+
+add-alias() {
+    local ALIAS_FILE="${ALIAS_FILE:-$HOME/.custom-aliases}"
+    local CMD_LIST="${CMD_LIST:-$HOME/.command-list}"
+
+    touch "$ALIAS_FILE" "$CMD_LIST"
+
+    # ── Validate input ────────────────────────────────────────────────────────
+
+    _aa_validate() {
+        local bare="${1#alias }"
+
+        if ! echo "$bare" | grep -qP '^[a-zA-Z_][a-zA-Z0-9_-]*=.+'; then
+            echo "  Syntax looks wrong. Expected: name='command' or alias name='command'"
+            return 1
+        fi
+
+        local alias_name
+        alias_name="$(echo "$bare" | cut -d= -f1)"
+
+        if grep -q "^alias ${alias_name}=" "$ALIAS_FILE" 2>/dev/null; then
+            echo "  '$alias_name' is already defined in $ALIAS_FILE"
+            echo -n "  Overwrite? [y/N] "
+            read -r overwrite
+            if [[ "$overwrite" =~ ^[Yy]$ ]]; then
+                sed -i "/^alias ${alias_name}=/d" "$ALIAS_FILE"
+                sed -i "/^${alias_name}:/d" "$CMD_LIST"
+            else
+                return 1
+            fi
+        fi
+
+        return 0
+    }
+
+    # ── Prompt ────────────────────────────────────────────────────────────────
+
+    echo "Adding alias to: $ALIAS_FILE"
+    echo "  Format: name='command'  or  alias name='command'"
+    echo "  Leave blank to cancel."
+    echo
+
+    local input
+    while true; do
+        echo -n "Alias: "
+        read -r input
+
+        [[ -z "$input" ]] && echo "Cancelled." && return 0
+
+        if _aa_validate "$input"; then
+            break
+        fi
+    done
+
+    # ── Normalize and write ───────────────────────────────────────────────────
+
+    local entry
+    if [[ "$input" != alias\ * ]]; then
+        entry="alias $input"
+    else
+        entry="$input"
+    fi
+
+    local alias_name
+    alias_name="$(echo "${entry#alias }" | cut -d= -f1)"
+
+    echo "$entry" >> "$ALIAS_FILE"
+    source "$ALIAS_FILE"
+    echo "  Added: $entry"
+
+    # ── Append to command list and open in nvim ───────────────────────────────
+
+    echo "${alias_name}\t= " >> "$CMD_LIST"
+    nvim "$CMD_LIST"
+}
