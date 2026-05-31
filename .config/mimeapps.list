@@ -1,0 +1,27 @@
+[Default Applications]
+text/html=vivaldi-stable.desktop
+x-scheme-handler/http=vivaldi-stable.desktop
+x-scheme-handler/https=vivaldi-stable.desktop
+x-scheme-handler/about=vivaldi-stable.desktop
+x-scheme-handler/unknown=vivaldi-stable.desktop
+video/mp4=vlc.desktop
+x-scheme-handler/mailto=userapp-Thunderbird-CLSSP3.desktop
+message/rfc822=userapp-Thunderbird-CLSSP3.desktop
+x-scheme-handler/mid=userapp-Thunderbird-CLSSP3.desktop
+application/octet-stream=nvim-open.desktop
+text/plain=nvim-open.desktop
+application/x-compressed-tar=userapp-tar-XUX7N3.desktop
+inode/directory=thunar.desktop
+application/x-zerosize=nvim-open.desktop
+application/pdf=okularApplication_pdf.desktop
+application/x-trash=featherpad.desktop
+
+[Added Associations]
+x-scheme-handler/mailto=userapp-Thunderbird-CLSSP3.desktop;userapp-Thunderbird-7B21M3.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-CLSSP3.desktop;userapp-Thunderbird-7B21M3.desktop;
+application/x-compressed-tar=userapp-tar-XUX7N3.desktop;
+inode/directory=vlc.desktop;
+application/x-zerosize=nvim-open.desktop;
+application/octet-stream=featherpad.desktop;
+text/html=micro.desktop;
+application/x-trash=featherpad.desktop;
