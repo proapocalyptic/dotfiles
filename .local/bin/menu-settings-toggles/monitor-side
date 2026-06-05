@@ -1,0 +1,12 @@
+#!/bin/bash
+MONITOR_FILE="$HOME/.config/hypr/hyprland/monitors.lua"
+
+if grep -q 'auto-left' "$MONITOR_FILE"; then
+    sed -i 's/auto-left/auto-right/g' "$MONITOR_FILE"
+    echo "Monitor position → auto-right"
+else
+    sed -i 's/auto-right/auto-left/g' "$MONITOR_FILE"
+    echo "Monitor position → auto-left"
+fi
+
+hyprctl reload
