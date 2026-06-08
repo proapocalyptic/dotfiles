@@ -1,6 +1,7 @@
 . "$HOME/.cargo/env"
 export SUDO_EDITOR=nvim
 export EDITOR=~/.local/bin/nvim-open
+export VIT_DIR=/home/alex/.config/vit/
 export VISUAL=~/.local/bin/nvim-open
 export QT_LOGGING_RULES="qt.bluetooth.bluez.warning=false"
 
