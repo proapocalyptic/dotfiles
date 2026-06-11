@@ -1,7 +1,8 @@
 -- hyprland.lua — Lua entry point (Hyprland 0.55+)
 
-
-hl.exec_cmd("hyprpm reload")
+-- ---establish emergency binds, built-in fallbacks are inconsistent---
+hl.bind("SUPER + CTRL + ALT + SHIFT + M",
+    hl.dsp.exec_cmd("sh -c 'command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit'"))
 
 require("hyprland.env")
 require("hyprland.monitors")

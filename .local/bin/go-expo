@@ -1,5 +1,0 @@
-#!/bin/bash
-
-hyprctl eval 'if hl.plugin.hyprexpo then hl.plugin.hyprexpo.expo() end'
-
-

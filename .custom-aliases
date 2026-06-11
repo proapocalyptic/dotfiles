@@ -15,27 +15,30 @@ alias zconfig='/home/alex/.access-menu/"shell configuration"'
 alias hexit='close_ranger; hyprshutdown'
 
 alias hc='hyprctl'
-alias hcd='hyprctl dispatcher'
 
-alias captain='~/.config/hypr/scripts/ensure-correct-main-panes'
 
 alias commands='less ~/.command-list'
 alias aliai='nvim ~/.custom-aliases'
 alias paint='flatpak run com.github.PintaProject.Pinta & disown'
-alias hconfig-w='vim ~/.config/hypr/window-and-workplace-rules.conf'
 alias wb-refresh="killall waybar;engage waybar;"
 alias rm='echo "use trash, you."&& trash '
 alias bars="hyprbars-toggle"
-alias upgradable='sudo apt update;apt list --upgradable'
+alias update='sudo apt update;apt list --upgradable'
 alias upgrade='sudo apt update && sudo apt upgrade'
 alias sourcez='source /home/alex/.zshrc'
 alias xtouch='/home/alex/.local/bin/touch-and-chmod+x.sh'
-alias calc='libreoffice --calc'
+alias spreadsheet='libreoffice --calc'
 alias zshrc='nvim-open ~/.zshrc'
 alias vetiver='ssh mediaservermedia@vetiver'
-alias filesystem='duf'
+alias drives='duf'
 alias frfx='firefox & disown'
+
+alias dotfiles="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 alias hcr="hyprctl reload"
 
 alias n="nvim-open"
+alias icat="kitten icat"
+alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias taskrc="nvim-open ~/.config/task/.taskrc"
+alias ggGV="echo 'this is what you type in vim (normal mode) to highlight everythng'"

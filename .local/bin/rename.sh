@@ -12,6 +12,7 @@
 #   Commands  — left-hand keys only:
 #     q  quit        a  prev page    s  skip
 #     z  undo        d  next page    x  exclude
+#     r  rename (type a custom name not in the list)
 
 set -o pipefail
 
@@ -311,7 +312,7 @@ print_file() {
 
 # Command reference line printed just before the input prompt.
 print_hint() {
-    echo -e "  ${DIM}[letter] assign  [s] skip  [x] exclude  [z] undo  [q] quit${RESET}"
+    echo -e "  ${DIM}[letter] assign  [r] rename  [s] skip  [x] exclude  [z] undo  [q] quit${RESET}"
     echo
 }
 
@@ -422,6 +423,17 @@ prompt_file() {
                 excluded+=("$filepath")
                 save_recovery
                 return
+                ;;
+            r)
+                # Manually type a custom name (for files not in the pool)
+                echo
+                read -rp "  New name: " custom_name
+                if [[ -n "$custom_name" ]]; then
+                    assignments["$filepath"]="$custom_name"
+                    save_recovery
+                    return
+                fi
+                # Empty input — just redraw
                 ;;
             z)
                 do_undo

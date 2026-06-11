@@ -11,7 +11,7 @@ hl.config({
 })
 
 hl.plugin.hyprbars.add_button({
-    bg_color = "rgb(ff4040)",
+    bg_color = "rgb(741324)",
     fg_color = "rgb(ffffff)",
     size = 10,
     icon = "X",
@@ -19,7 +19,7 @@ hl.plugin.hyprbars.add_button({
 })
 
 hl.plugin.hyprbars.add_button({
-    bg_color = "rgb(eeee11)",
+    bg_color = "rgb(fea001)",
     fg_color = "rgb(000000)",
     size = 10,
     icon = "_",

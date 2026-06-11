@@ -1,18 +1,25 @@
--- keybindings.lua — keybinds (was keybindings.conf)
-
+-- keybindings.lua — keybinds (was keybindings.conf)<D-Tab> map super+p paste_from_clipboar
 local SUPER = "SUPER"
 
+-- ---- essential binds ---
+hl.bind(SUPER .. " + Z", hl.dsp.exec_cmd("kitty -1"))
+hl.bind(SUPER .. " + CTRL + ALT + SHIFT + M",
+    hl.dsp.exec_cmd("sh -c 'command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit'"))
+
+
+
+-- ---- clipboard ----
+hl.bind("CTRL + SHIFT + V", hl.dsp.exec_cmd("paste-primary.sh"))
 -- ---- Window management ----
 hl.bind(SUPER .. " + F", hl.dsp.window.fullscreen({}))
-hl.bind(SUPER .. " + Q", hl.dsp.exec_cmd("kitty -1"))
-hl.bind(SUPER .. " + C", hl.dsp.window.close())
+hl.bind(SUPER .. " + Q", hl.dsp.window.close())
 hl.bind(SUPER .. " + CTRL + SHIFT + M",
     hl.dsp.exec_cmd("sh -c 'command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit'"))
 hl.bind(SUPER .. " + E", hl.dsp.exec_cmd("thunar"))
-hl.bind(SUPER .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(SUPER .. " + H", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(SUPER .. " + R", hl.dsp.exec_cmd("hyprlauncher"))
 
-hl.bind(SUPER .. " + P", hl.dsp.window.pseudo({ action = "toggle" }))
+hl.bind(SUPER .. " + CTRL + SHIFT + P", hl.dsp.window.pseudo({ action = "toggle" }))
 hl.bind(SUPER .. " + J", hl.dsp.layout("togglesplit"))
 
 -- ---- Focus movement ----
@@ -27,6 +34,7 @@ for i = 1, 9 do
 end
 hl.bind(SUPER .. " + 0",          hl.dsp.focus({ workspace = "10" }))
 hl.bind(SUPER .. " + SHIFT + 0",  hl.dsp.window.move({ monitor = "+1" }))
+hl.bind(SUPER .. " + SHIFT + O",  hl.dsp.workspace.move({ monitor = "+1" }))
 
 -- Lock screen
 hl.bind(SUPER .. " + L", hl.dsp.exec_cmd("swaylock -f --color 4A154B"))
@@ -94,6 +102,10 @@ local x = not hl.get_config("animations.enabled")
 hl.config({ animations = { enabled = x }})
 end)
 
+-- quick access terminal
+hl.bind(SUPER .. " + K", hl.dsp.exec_cmd("kitten quick-access-terminal"))
+
+
 -- Workspace switchback 
 hl.bind(SUPER .. " + Tab", hl.dsp.window.cycle_next())
 
@@ -121,8 +133,8 @@ hl.bind(SUPER .. " + Tab", hl.dsp.window.cycle_next())
 --#region
 
 local workspaces = {
-    { key = "A", id = 1,  run = "kitty --class kitty-home --override confirm_os_window_close=0 -e /home/alex/.config/hypr/scripts/workspace-1-secondaries.sh" },  -- TERMINAL
-    { key = "S", id = 2                       },  -- RNGR
+    { key = "A", id = 1,  run = "kitty -1 --class kitty-home --override confirm_os_window_close=0 -e /home/alex/.config/hypr/scripts/workspace-1-secondaries.sh" },  -- TERMINAL
+    { key = "S", id = 2,   run = "kitty -1 --class kitty-ranger -e ranger & thunar /home/"               },  -- RNGR
     { key = "D", id = 3,  run = "vivaldi"  },  -- VLDI
     { key = "F", id = 4,  run = "firefox"  },  -- FRFX
     { key = "J", id = 5,  run = "nvim-open ~/.config/"},  -- NVIM

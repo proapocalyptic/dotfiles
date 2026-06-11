@@ -1,11 +1,32 @@
 #these are alex wolfe's custom shell functions. hey
 
-
+source '/home/alex/.config/hypr/hypr-shell-functions.sh'
 
 engage () { hyprctl dispatch "hl.dsp.exec_cmd([[$*]])"; }
 
+dr.cat () {cat $1|gum format --type="markdown"}
 
+switch() {
+    hyprctl dispatch "hl.dsp.focus({ workspace = [[$1]] })"
+}
 
+paste-primary(){
+wl-paste > /tmp/storage && wl-paste --primary | wl-copy && wl-paste && cat /tmp/storage | wl-copy  
+}
+
+command_not_found_handler() {
+    local ext="${1:e:l}"  # extension, lowercased
+    case "$ext" in
+        jpg|jpeg|png|gif|webp|avif|bmp|tiff|tif|svg|ico)
+            if [[ -f "$1" ]]; then
+                kitty +kitten icat "$1"
+                return 0
+            fi
+            ;;
+    esac
+    print -u2 "zsh: command not found: $1"
+    return 127
+}
 
 add-alias() {
     local ALIAS_FILE="${ALIAS_FILE:-$HOME/.custom-aliases}"

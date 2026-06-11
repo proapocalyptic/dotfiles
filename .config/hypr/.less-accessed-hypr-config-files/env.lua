@@ -28,3 +28,4 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 
 -- App-specific (LibreOffice: use GTK4 backend)
 hl.env("SAL_USE_VCLPLUGIN", "gtk4")
+hl.env("YDOTOOL_SOCKET", os.getenv("XDG_RUNTIME_DIR") .. "/.ydotool_socket")

@@ -6,7 +6,7 @@
 hl.window_rule({
     name = "hyprbar-whitelist",
     match = { initial_title = "^(.*)$" },
-    ["hyprbars:no_bar"] = true,
+  --  ["hyprbars:no_bar"] = true,
 })
 
 hl.window_rule({
@@ -35,7 +35,7 @@ hl.window_rule({
     name = "kitty-home-settings",
     match = { initial_class = "kitty-home" },
     ["hyprbars:no_bar"] = true,
-    border_size = 15,
+    border_size = 4,
 })
 
 hl.window_rule({
@@ -48,6 +48,12 @@ hl.window_rule({
     name = "access-stylin",
     match = { class = "kitty-access-menu" },
     ["hyprbars:no_bar"] = true,
+})
+
+hl.window_rule({
+    name = "loudness-control",
+    match = { class = "org.pulseaudio.pavucontrol" },
+    ["hyprbars:no_bar"] = false,
 })
 
 
@@ -70,4 +76,4 @@ hl.window_rule({
     name = "hyprbar-on",
     match = { tag = "bars-toggle-off" },
     ["hyprbars:no_bar"] = true,
-})
+}/)

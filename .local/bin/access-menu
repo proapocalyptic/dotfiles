@@ -1,13 +1,54 @@
 #!/usr/bin/env bash
+# access-menu — main launcher for assorted scripts and submenus
+# Scripts in SCRIPT_DIR appear automatically; extra entries let you
+# point to commands or menus elsewhere (see extra_entries below).
+
 SCRIPT_DIR="$HOME/.access-menu"
+
+# gum styling
 export GUM_CHOOSE_CURSOR="> "
-export GUM_CHOOSE_CURSOR_FOREGROUND="#FF75B7"
-export GUM_CHOOSE_SELECTED_FOREGROUND="#00FFFF"
+export GUM_CHOOSE_CURSOR_FOREGROUND="#fb6e93"
+export GUM_CHOOSE_HEADER_FOREGROUND="#789aba"
+export GUM_CHOOSE_ITEM_FOREGROUND="#ebdbb2"
 export GUM_CHOOSE_HEIGHT=15
+
+# Extra menu sources: "Display Label|/path/to/script/or/command"
+extra_entries=(
+  "Settings|/home/alex/.local/bin/menu-settings-toggle"
+  "Misc Commands|/home/alex/.local/bin/menu-misc-command"
+)
+
+# Main loop — keeps showing the menu until user cancels
 while true; do
   clear
-   figlet -f Rectangles Open Me
-  chosen=$(ls "$SCRIPT_DIR" | gum choose)
+  # figlet -f Rectangles Open Me
+  toilet -f future -F gay -F border "Open Me" | sed 's/^/       /'
+
+  # Build list: scripts from SCRIPT_DIR + labels from extra_entries
+  choices=()
+  while IFS= read -r f; do
+    choices+=("$f")
+  done < <(ls "$SCRIPT_DIR" 2>/dev/null)
+  for entry in "${extra_entries[@]}"; do
+    choices+=("${entry%%|*}")
+  done
+printf "\e]2;access-menu\a"
+  # Show the menu; empty means user cancelled (Esc / Ctrl-C)
+  chosen=$(printf "%s\n" "${choices[@]}" | gum choose)
   [[ -z "$chosen" ]] && break
-  bash "$SCRIPT_DIR/$chosen"
+
+  # Check extra entries first (they take priority over SCRIPT_DIR)
+  matched=0
+  for entry in "${extra_entries[@]}"; do
+    label="${entry%%|*}"
+    cmd="${entry#*|}"
+    if [[ "$chosen" == "$label" ]]; then
+      eval "$cmd"
+      matched=1
+      break
+    fi
+  done
+
+  # Fall back to running a script from SCRIPT_DIR
+  [[ $matched -eq 0 ]] && bash "$SCRIPT_DIR/$chosen"
 done

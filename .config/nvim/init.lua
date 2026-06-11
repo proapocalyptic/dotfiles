@@ -6,6 +6,9 @@ vim.wo.number = true
 
 vim.keymap.set('n', '<Tab>', ':bn<CR>')
 vim.keymap.set('n', '<S-Tab>', ':bp<CR>')
+vim.keymap.set('n', '<C-s>', '"*p', { noremap = true, silent = true })
+vim.keymap.set('n', 'cl', ':let @/ = ""<CR>')
+
 
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
@@ -35,9 +38,6 @@ vim.api.nvim_create_autocmd("BufRead", {
 -- sort nvim directory view with symlinks first
 vim.g.netrw_sort_sequence = [[[\/]$,@$,*]]
 
-vim.filetype.add({
-  pattern = { [".*/hypr/.*%.conf"] = "hyprlang" },
-})
 
 
 vim.lsp.set_log_level("error")
@@ -100,31 +100,3 @@ require('lualine').setup {
       extensions = {}
     }
 
--- pre-lua hyprls / hyprlang
-vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
-		pattern = {"*.hl", "hypr*.conf"},
-		callback = function(event)
-				vim.lsp.start {
-						name = "hyprlang",
-						cmd = {"hyprls"},
-						root_dir = vim.fn.getcwd(),
-						settings = {
-							hyprls = {
-								preferIgnoreFile = true, -- set to false to prefer `hyprls.ignore`
-								ignore = {"hyprlock.conf", "hypridle.conf"}
-							}
-						}
-					}
-		end
-})
-
-
-
-
-local original_notify = vim.notify
-vim.notify = function(msg, ...)
-    if type(msg) == "string" and msg:match("starting hyprls") then
-        return
-    end
-    original_notify(msg, ...)
-end

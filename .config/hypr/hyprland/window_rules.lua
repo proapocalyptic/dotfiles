@@ -2,6 +2,7 @@
 
 -- ---- LAYER RULES ----
 hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
+hl.window_rule({ match = { namespace = "kitty-quick-access" }, decorate = true, border_size = 1, border_color = "rgba(E6DCC3FF)" })
 
 
 -- ---- GLOBAL DEFAULTS ----
@@ -145,7 +146,7 @@ hl.window_rule({
 -- ---- PER-APP APPEARANCE ----
 
 -- kitty slideup
-hl.window_rule({ match = { class = "^kitty" }, animation = "slide bottom" })
+hl.window_rule({ match = { class = "^kitty" }, border_size = 1, animation = "slide bottom" })
 
 hl.window_rule({
     name = "sysmon-opacity",

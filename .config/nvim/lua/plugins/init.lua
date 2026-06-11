@@ -5,7 +5,7 @@ return {
         build = ":TSUpdate",
         config = function()
            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "lua", "hyprlang","markdown" },
+                ensure_installed = { "lua", "markdown" },
                 highlight = { enable = true },
             })
         end
@@ -28,17 +28,6 @@ return {
         vim.cmd("colorscheme tokyonight-night")
     end
 },
-{
-    "neovim/nvim-lspconfig",
-    config = function()
-        vim.lsp.config("hyprls", {
-            cmd = { "hyprls" },
-            filetypes = { "hyprlang" },
-        })
-        vim.lsp.enable("hyprls")
-    end
-},
-
 {
     "akinsho/bufferline.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -115,7 +104,6 @@ return {
     opts = {},
     dependencies = {
         { "mason-org/mason.nvim", opts = {} },
-        "neovim/nvim-lspconfig",
     },
 },
 

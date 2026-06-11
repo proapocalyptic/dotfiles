@@ -4,17 +4,16 @@
 hl.config({ scrolling = { column_width = 0.8 } })
 
 -- ---- Workspace definitions ----
-hl.workspace_rule({ workspace = "1",  default_name = "TERMINAL", persistent = true, default = true,  gaps_out = 0, gaps_in = 4 })
+hl.workspace_rule({ workspace = "1",  default_name = "TERMINAL", persistent = true, default = true,  gaps_out = 2, gaps_in = 2 })
 hl.workspace_rule({ workspace = "2",  default_name = "RNGR",     persistent = true,
 		    layout = "scrolling", layout_opts = { direction = "down" }} )
 
-hl.workspace_rule({ workspace = "3",  default_name = "VLDI",     persistent = true, gaps_out = 0, gaps_in = 0,
-		    layout = "monacle"})
+hl.workspace_rule({ workspace = "3",  default_name = "VLDI",     persistent = true, gaps_out = 1, gaps_in = 0,})
 hl.workspace_rule({ workspace = "4",  default_name = "FRFX",     persistent = true })
 hl.workspace_rule({ workspace = "5",  default_name = "NVIM",     persistent = true })
 hl.workspace_rule({ workspace = "6",  default_name = "OBSDN",    persistent = true })
 hl.workspace_rule({ workspace = "7",  default_name = "MAIL",     persistent = true })
-hl.workspace_rule({ workspace = "8",  default_name = "ADMIN",	 persistent = true,
+hl.workspace_rule({ workspace = "8",  default_name = "ADMIN",	 persistent = true, gaps_out=1, gaps_in=2,
 	  	    layout = "scrolling", layout_opts = { direction = "down" }})
 
 
@@ -30,9 +29,7 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 0 }
 hl.window_rule({ match = { float = false, workspace = "f[1]"   }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]"   }, rounding = 0 })
 
--- ---- workspace-specific styles ----
 
-hl.workspace_rule({ workspace = "8", gaps_in = 0, gaps_out=0 })
 
 -- ---- Window → workspace routing ----
 local function route(class, ws)
@@ -54,4 +51,4 @@ route("vlc",             "13")
 route("special-terminal","special:theZone")
 
 -- Workspace Layouts --
-hl.workspace_rule({ workspace = "1", layout_opts = { mfact = 0.75 } })
+hl.workspace_rule({ workspace = "1", layout_opts = { mfact = 0.8 } })
