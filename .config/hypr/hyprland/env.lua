@@ -25,7 +25,19 @@ hl.env("SDL_VIDEODRIVER", "wayland")
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_TYPE", "wayland")
 hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+hl.env("ELECTRON_OZONE_PLATFORM_HINT", "wayland")
+hl.env("MOZ_ENABLE_WAYLAND", "1")
 
--- App-specific (LibreOffice: use GTK4 backend)
+-- xwayland scaling
+hl.env("GDK_DPI_SCALE", "1.25")
+hl.env("QT_ENABLE_HIGHDPI_SCALING", "1")
+hl.env("QT_SCALE_FACTOR", "1.25")
+
+
+-- -- App-specific 
+-- LibreOffice: use GTK4 backend)
 hl.env("SAL_USE_VCLPLUGIN", "gtk4")
 hl.env("YDOTOOL_SOCKET", os.getenv("XDG_RUNTIME_DIR") .. "/.ydotool_socket")
+
+-- TaskWarrior
+hl.env("TASKRC", "/home/alex/.config/task/.taskrc")

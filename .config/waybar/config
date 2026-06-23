@@ -13,11 +13,12 @@
         "~/.config/waybar/modules.json"
     ],    
     "modules-left": [
-            "custom/appmenu",
+   //    "custom/appmenu",
         "hyprland/workspaces"
       //  "group/quicklinks"
     ],
     "modules-center": [
+    	"custom/compass-rose",
      ],
 
     "modules-right": [

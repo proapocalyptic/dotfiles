@@ -4,6 +4,8 @@
 hl.bind("SUPER + CTRL + ALT + SHIFT + M",
     hl.dsp.exec_cmd("sh -c 'command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit'"))
 
+
+
 require("hyprland.env")
 require("hyprland.monitors")
 require("hyprland.input")

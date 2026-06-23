@@ -7,6 +7,8 @@ hl.config({
 
         follow_mouse = 1,
         sensitivity = 0,
+	mouse_refocus = false,
+
 
         repeat_delay = 750,
         repeat_rate = 30,

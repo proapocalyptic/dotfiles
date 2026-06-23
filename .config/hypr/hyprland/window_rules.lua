@@ -2,7 +2,18 @@
 
 -- ---- LAYER RULES ----
 hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
-hl.window_rule({ match = { namespace = "kitty-quick-access" }, decorate = true, border_size = 1, border_color = "rgba(E6DCC3FF)" })
+hl.layer_rule({ match = { namespace = "waybar" }, blur = true, animation = "popin"})
+
+hl.layer_rule({
+	match = { namespace = "^kitty-quick-access$" }, 
+	animation = "slideup",
+	xray	= false,
+	})
+
+hl.layer_rule({ match = { namespace = "compass-rose" },
+	        blur = true, 
+		animation = "fade",
+	})
 
 
 -- ---- GLOBAL DEFAULTS ----
@@ -22,9 +33,19 @@ hl.window_rule({
 
 -- ---- PINNED OVERLAYS ----
 
+
+
 hl.window_rule({
     name = "firefox-pip",
     match = { title = "^(Picture-in-Picture)$", class = "^(firefox)$" },
+    float = true, pin = true,
+    size = { "480", "270" }, move = { "2", "156" },
+    animation = "slidedown",
+})
+
+hl.window_rule({
+    name = "librewolf-pip",
+    match = { title = "^(Picture-in-Picture)$", class = "^(librewolf)$" },
     float = true, pin = true,
     size = { "480", "270" }, move = { "2", "156" },
     animation = "slidedown",
@@ -39,11 +60,11 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    name = "clipse",
-    match = { class = "^(clipse)$" },
+    name = "kitty-clipse",
+    match = { class = "^(kitty-clipse)$" },
     float = true,
-    size = { "622", "652" }, move = { "908", "155" },
-    animation = "slidedown",
+    size = { "576", "600" }, move = { "12", "152" },
+    animation = "slide left",
 })
 
 hl.window_rule({
@@ -155,7 +176,17 @@ hl.window_rule({
 })
 
 hl.window_rule({ name = "firefox-opaque",  match = { class = "firefox" },        opaque = true })
+hl.window_rule({ name = "librewolf-opaque",  match = { class = "librewolf" },        opaque = true })
 hl.window_rule({ name = "vivaldi-opaque",  match = { class = "vivaldi-stable" }, opaque = true })
 hl.window_rule({ name = "vlc-opaque",      match = { class = "vlc" },            opaque = true })
+
+hl.window_rule({
+    name = "scratcher",
+    match = { class = "kitty-rightslide" },
+    float = true,
+    size = { "576", "600" },
+    move = { "924", "152" },
+    animation = "slide right",
+})
 
 

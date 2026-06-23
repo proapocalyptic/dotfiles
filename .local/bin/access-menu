@@ -7,8 +7,8 @@ SCRIPT_DIR="$HOME/.access-menu"
 
 # gum styling
 export GUM_CHOOSE_CURSOR="> "
-export GUM_CHOOSE_CURSOR_FOREGROUND="#fb6e93"
-export GUM_CHOOSE_HEADER_FOREGROUND="#789aba"
+export GUM_CHOOSE_CURSOR_FOREGROUND="#ca1444"
+export GUM_CHOOSE_HEADER_FOREGROUND="#f2a297"
 export GUM_CHOOSE_ITEM_FOREGROUND="#ebdbb2"
 export GUM_CHOOSE_HEIGHT=15
 
@@ -22,7 +22,7 @@ extra_entries=(
 while true; do
   clear
   # figlet -f Rectangles Open Me
-  toilet -f future -F gay -F border "Open Me" | sed 's/^/       /'
+  toilet -f future -F gay -F border "Open Me"
 
   # Build list: scripts from SCRIPT_DIR + labels from extra_entries
   choices=()

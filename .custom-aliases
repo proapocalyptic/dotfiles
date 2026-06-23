@@ -42,3 +42,12 @@ alias icat="kitten icat"
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias taskrc="nvim-open ~/.config/task/.taskrc"
 alias ggGV="echo 'this is what you type in vim (normal mode) to highlight everythng'"
+alias launch="kitty @ action launch"
+
+alias config="cd ~/.config;lsd"
+alias conf="cd ~/.config;lsd"
+
+alias lbin="cd ~/.local/bin;lsd"
+alias stubs="echo /usr/share/hypr/stubs/hl.meta.lua"
+alias Pictures="cd ~/Pictures"
+alias waybar-css="killall waybar && GTK_DEBUG=interactive waybar"

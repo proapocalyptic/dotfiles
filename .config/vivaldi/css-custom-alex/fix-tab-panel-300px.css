@@ -1,5 +1,4 @@
-
-#tabs-container {
-	max-width:300px;
+#main > div.inner.svb-layout-host.svb-mode-docked {
+    --svb-sidebar-width: 300px !important;
 
 }

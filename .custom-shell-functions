@@ -102,3 +102,63 @@ add-alias() {
     echo "${alias_name}\t= " >> "$CMD_LIST"
     nvim "$CMD_LIST"
 }
+
+# Wrapper for tasksh that prints a reminder/instruction for task-block
+tasksh() {
+    printf "\033[1;36m===================================================================\033[0m\n"
+    printf "\033[1;33mTaskwarrior Blocker Hint:\033[0m\n"
+    printf "   Use \033[1;32m!task-block <id> \"Description\" ...\033[0m to create a task\n"
+    printf "   that blocks an existing task and inherits its project.\n"
+    printf "\033[1;36m===================================================================\033[0m\n\n"
+    command tasksh "$@"
+}
+
+
+
+# Zsh hook for directory changes-- show images on wsp1.
+
+_ICAT_ID_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/icat_win_id"
+
+launch_icat_window() {
+    kitty @ launch --env ZSH_NO_HEADER=1 --type=window --keep-focus zsh > "$_ICAT_ID_FILE"
+}
+
+_icat_pick_image() {
+    if [[ -f "$PWD/.directory-image-override" ]]; then
+        local img=$(<"$PWD/.directory-image-override")
+        img="${img%$'\n'}"
+    else
+        local img=$(find "$PWD" -maxdepth 1 -type f \
+            \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.gif' \) \
+            | shuf -n1)
+    fi
+    printf '%s' "$img"
+}
+
+_icat_send_image() {
+    setopt HIST_IGNORE_SPACE
+    local img=$1
+    local win_id=$(<"$_ICAT_ID_FILE")
+    [[ -z "$win_id" || -z "$img" ]] && return
+    local name="${img##*/}"
+    kitty @ send-text --match "id:$win_id" " kitty @ action clear_terminal scrollback active && clear && kitten icat --clear '$img' && kitty @ scroll-window end; kitty @ scroll-window 2- && printf '\\\\033[38;2;80;80;80m%s\\\\033[0m\\\\n' '$name' \r"
+    unsetopt HIST_IGNORE_SPACE
+}
+
+chpwd() {
+
+    [[ ! -f "$_ICAT_ID_FILE" ]] && return
+    local img=$(_icat_pick_image)
+    [[ -z "$img" ]] && return
+    _icat_send_image "$img"
+}
+
+ni() {
+    [[ ! -f "$_ICAT_ID_FILE" ]] && echo "Icat window not found" && return 1
+    local img=$(_icat_pick_image)
+    if [[ -z "$img" ]]; then
+        echo "No images found in $PWD"
+        return 1
+    fi
+    _icat_send_image "$img"
+}

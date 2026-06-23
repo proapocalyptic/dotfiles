@@ -1,4 +1,3 @@
--- keybindings.lua — keybinds (was keybindings.conf)<D-Tab> map super+p paste_from_clipboar
 local SUPER = "SUPER"
 
 -- ---- essential binds ---
@@ -12,35 +11,60 @@ hl.bind(SUPER .. " + CTRL + ALT + SHIFT + M",
 hl.bind("CTRL + SHIFT + V", hl.dsp.exec_cmd("paste-primary.sh"))
 -- ---- Window management ----
 hl.bind(SUPER .. " + F", hl.dsp.window.fullscreen({}))
-hl.bind(SUPER .. " + Q", hl.dsp.window.close())
+hl.bind(SUPER .. " + SHIFT + Q", hl.dsp.window.close())
 hl.bind(SUPER .. " + CTRL + SHIFT + M",
     hl.dsp.exec_cmd("sh -c 'command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit'"))
 hl.bind(SUPER .. " + E", hl.dsp.exec_cmd("thunar"))
 hl.bind(SUPER .. " + H", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(SUPER .. " + R", hl.dsp.exec_cmd("hyprlauncher"))
+hl.bind(SUPER .. " + E", hl.dsp.exec_cmd("thunar"))
+
+hl.bind(SUPER .. " + M", hl.dsp.exec_cmd("~/.config/waybar/scripts/compass-menu.sh"))
 
 hl.bind(SUPER .. " + CTRL + SHIFT + P", hl.dsp.window.pseudo({ action = "toggle" }))
-hl.bind(SUPER .. " + J", hl.dsp.layout("togglesplit"))
 
 -- ---- Focus movement ----
 hl.bind(SUPER .. " + a",     hl.dsp.focus({ direction = "l" }))
+hl.bind(SUPER .. " + d",     hl.dsp.layout("cyclenext")) 
 hl.bind(SUPER .. " + d",     hl.dsp.focus({ direction = "r" }))
 hl.bind(SUPER .. " + w",     hl.dsp.focus({ direction = "u" }))
 hl.bind(SUPER .. " + s",     hl.dsp.focus({ direction = "d" }))
 -- ---- Workspaces 1-10 ----
 for i = 1, 9 do
-    hl.bind(SUPER .. " + " .. i, hl.dsp.focus({ workspace = tostring(i) }))
+    hl.bind(SUPER .. " + " .. i, function()
+        local cur = hl.get_active_workspace()
+        if cur and cur.id == i then
+            hl.dispatch(hl.dsp.focus({ workspace = "previous" }))
+        else
+            hl.dispatch(hl.dsp.focus({ workspace = tostring(i) }))
+        end
+    end)
     hl.bind(SUPER .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = tostring(i) }))
 end
-hl.bind(SUPER .. " + 0",          hl.dsp.focus({ workspace = "10" }))
+hl.bind(SUPER .. " + 0", function()
+    local cur = hl.get_active_workspace()
+    if cur and cur.id == 10 then
+        hl.dispatch(hl.dsp.focus({ workspace = "previous" }))
+    else
+        hl.dispatch(hl.dsp.focus({ workspace = "10" }))
+    end
+end)
 hl.bind(SUPER .. " + SHIFT + 0",  hl.dsp.window.move({ monitor = "+1" }))
 hl.bind(SUPER .. " + SHIFT + O",  hl.dsp.workspace.move({ monitor = "+1" }))
 
 -- Lock screen
 hl.bind(SUPER .. " + L", hl.dsp.exec_cmd("swaylock -f --color 4A154B"))
 
--- Special workspace
-hl.bind(SUPER .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:theZone" }))
+hl.bind("SUPER + code:61", function()
+    local wins = hl.get_windows({ class = "kitty-rightslide" })
+    if #wins > 0 then
+        hl.dispatch(hl.dsp.window.close({ window = wins[1] }))
+    else
+        hl.dispatch(hl.dsp.exec_cmd("kitty -1 --class kitty-rightslide -e micro /home/alex/Scratcher.md"))
+    end
+end)
+
+
 
 -- Scroll between workspaces
 hl.bind(SUPER .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
@@ -73,8 +97,8 @@ hl.bind("SUPER + Return",   hl.dsp.exec_cmd("kitty"))
 hl.bind("SUPER + SHIFT + E", hl.dsp.exit())
 
 -- Special workspace toggle via keycode 49 (`/~ key)
-hl.bind("SUPER + code:49",         hl.dsp.workspace.toggle_special("theZone"))
-hl.bind("SUPER + SHIFT + code:49", hl.dsp.window.move({ workspace = "theZone" }))
+--hl.bind("SUPER + code:49",         hl.dsp.workspace.toggle_special("theZone"))
+--hl.bind("SUPER + SHIFT + code:49", hl.dsp.window.move({ workspace = "theZone" }))
 
 -- Swap windows left/right
 hl.bind(SUPER .. " + left",  hl.dsp.window.swap({ direction = "l" }))
@@ -93,9 +117,15 @@ hl.bind(SUPER .. " + G", function()
     hl.dispatch(hl.dsp.window.move({ into_group = "l" }))
 end)
 
--- Clipboard manager
-hl.bind(SUPER .. " + SHIFT + V",
-    hl.dsp.exec_cmd("kitty --class clipse --override confirm_os_window_close=0 -e clipse-linux-wayland-amd64"))
+-- Clipboard manager toggle
+hl.bind(SUPER .. " + V", function()
+    local wins = hl.get_windows({ class = "kitty-clipse" })
+    if #wins > 0 then
+        hl.dispatch(hl.dsp.window.close({ window = wins[1] }))
+    else
+        hl.dispatch(hl.dsp.exec_cmd("kitty -1 --class kitty-clipse --config /home/alex/config/kitty/kitty-clipse.conf --override confirm_os_window_close=0 -e clipse-linux-wayland-amd64"))
+    end
+end)
 
 hl.bind(SUPER .. " + ALT + a", function() 
 local x = not hl.get_config("animations.enabled")
@@ -103,7 +133,13 @@ hl.config({ animations = { enabled = x }})
 end)
 
 -- quick access terminal
-hl.bind(SUPER .. " + K", hl.dsp.exec_cmd("kitten quick-access-terminal"))
+hl.bind(SUPER .. " + K", hl.dsp.exec_cmd("ZSH_NO_HEADER=2 kitten quick-access-terminal "))
+
+
+
+
+-- Toggle On-screen-keyboard (function in General.lua)
+hl.bind("SUPER + ALT + K", toggle_osk)
 
 
 -- Workspace switchback 
@@ -130,48 +166,75 @@ hl.bind(SUPER .. " + Tab", hl.dsp.window.cycle_next())
 --    { key = "L", id = 13, run = "vlc"      },  -- VLC
 --}
 --
---#region
+--#regionger -e ranger & thunar /home/"
 
 local workspaces = {
-    { key = "A", id = 1,  run = "kitty -1 --class kitty-home --override confirm_os_window_close=0 -e /home/alex/.config/hypr/scripts/workspace-1-secondaries.sh" },  -- TERMINAL
-    { key = "S", id = 2,   run = "kitty -1 --class kitty-ranger -e ranger & thunar /home/"               },  -- RNGR
-    { key = "D", id = 3,  run = "vivaldi"  },  -- VLDI
+    { key = "A", id = 1,  run = "kitty -1  --class kitty-home --override confirm_os_window_close=0 --session ~/.config/kitty/workspace1.conf" },  -- TERMINAL
+    { key = "2", id = 2,  run = "kitty -1 --class kitty-ranger --override confirm_os_window_close=0 -e ranger & thunar /home/"               },  -- RNGR
+    { key = "V", id = 3,  run = "vivaldi"  },  -- VLDI
     { key = "F", id = 4,  run = "firefox"  },  -- FRFX
-    { key = "J", id = 5,  run = "nvim-open ~/.config/"},  -- NVIM
-    { key = "K", id = 6,  run = "obsidian" },  -- OBSDN
-    { key = "L", id = 7,  run = "thunderbird-go"},  -- MAIL
+    { key = "W", id = 4,  run = "librewolf"  },  -- LBRW
+    { key = "N", id = 5,  run = "nvim-open ~/.config/"},  -- NVIM
+    { key = "O", id = 6,  run = "obsidian" },  -- OBSDN
+    { key = "C", id = 7,  run = "thunderbird-go"},  -- MAIL
     { key = "semicolon", id = 8, run = "sysmon-run.sh"},  -- ADMIN
     { key = "S", id = 11, run = "steam"    },  -- STEAM
     { key = "I", id = 12, run = "itch"     },  -- ITCH
     { key = "L", id = 13, run = "vlc"      },  -- VLCh
+       { key = "T", id = 9, run = "TaskZone.sh"    }
 }
 
-hl.bind("SUPER + SHIFT + F23", hl.dsp.submap("ws-focus"), { bypass = true })
+  -- STEAM
+
+hl.bind("SUPER + SHIFT + M", hl.dsp.submap("ws-run"))
+
+hl.bind("SUPER + SHIFT + F23", hl.dsp.submap("ws-focus"))
+
+local transitioning = false
 
 hl.define_submap("ws-focus", function()
-    hl.bind("M", hl.dsp.submap("ws-move"))
-    hl.bind("R", hl.dsp.submap("ws-run"))
+    hl.bind("M", function()
+        transitioning = true
+        hl.dispatch(hl.dsp.submap("ws-move"))
+    end)
+    hl.bind("R", function()
+        transitioning = true
+        hl.dispatch(hl.dsp.submap("ws-run"))
+    end)
     for _, ws in ipairs(workspaces) do
         hl.bind(ws.key, function()
-            hl.dispatch(hl.dsp.focus({ workspace = ws.id }))
+            if type(ws.id) == "string" and ws.id:find("^special:") then
+                hl.dispatch(hl.dsp.workspace.toggle_special(ws.id:match("^special:(.+)$")))
+            else
+                local cur = hl.get_active_workspace()
+                if cur and cur.id == ws.id then
+                    hl.dispatch(hl.dsp.focus({ workspace = "previous" }))
+                else
+                    hl.dispatch(hl.dsp.focus({ workspace = ws.id }))
+                end
+            end
             hl.dispatch(hl.dsp.submap("reset"))
         end)
     end
-    hl.bind("catchall", hl.dsp.submap("reset"))
+    hl.bind("catchall", function()
+        if not transitioning then
+            hl.dispatch(hl.dsp.submap("reset"))
+        end
+        transitioning = false
+    end)
 end)
 
 
-hl.define_submap("ws-move", function()
+hl.define_submap("ws-move", "reset", function()
     for _, ws in ipairs(workspaces) do
         hl.bind(ws.key, function()
             hl.dispatch(hl.dsp.window.move({ workspace = ws.id, follow = true }))
-            hl.dispatch(hl.dsp.submap("reset"))
         end)
     end
     hl.bind("catchall", hl.dsp.submap("reset"))
 end)
 
-hl.define_submap("ws-run", function()
+hl.define_submap("ws-run", "reset", function()
     for _, ws in ipairs(workspaces) do
         if ws.run then
             hl.bind(ws.key, function()
@@ -180,10 +243,11 @@ hl.define_submap("ws-run", function()
                     hl.dispatch(hl.dsp.exec_cmd(ws.run))
                 end
                 hl.dispatch(hl.dsp.focus({ workspace = ws.id }))
-                hl.dispatch(hl.dsp.submap("reset"))
             end)
         end
     end
     hl.bind("catchall", hl.dsp.submap("reset"))
 end)
+
+
 

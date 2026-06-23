@@ -5,9 +5,9 @@
     "keybind" : "l"
 }
 {
-    "label" : "HYPRSHUTDOWN",
-    "action" : "hyprshutdown",
-    "text" : "Hyprshutdown",
+    "label" : "hibernate",
+    "action" : "",
+    "text" : "Does Nothing",
     "keybind" : "h"
 }
 {
@@ -19,13 +19,13 @@
 {
     "label" : "shutdown",
     "action" : "systemctl poweroff",
-    "text" : "Shutdown",:
+    "text" : "Shutdown",
     "keybind" : "s"
 }
 {
     "label" : "suspend",
-    "action" : "systemctl suspend",
-    "text" : "Suspend",
+    "action" : "",
+    "text" : "Leave Here",
     "keybind" : "u"
 }
 {

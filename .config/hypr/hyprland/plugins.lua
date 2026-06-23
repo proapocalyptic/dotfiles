@@ -33,19 +33,19 @@ local hg = hl.plugin.hyprglass
 hg.config({
     default_theme = "dark",
     default_preset = "glass",
-    tint_color = 0x8899aa22,
+    --    tint_color = 0x8899aa22,
 
-    brightness = 0.9,
-    dark = { brightness = 0.82 },
-    light = { adaptive_boost = 0.5 },
+  --  brightness = 0.9,
+ --   dark = { brightness = 0.82 },
+   -- light = { adaptive_boost = 0.5 },
 
     layers = { enabled = 1 },
 })
 
 -- Layer surfaces: each call whitelists the namespace and configures it
-hg.layer("waybar", { preset = "subtle", mask_threshold = 0.05 })
-hg.layer("swaync")
-hg.layer("quickshell:bezel", { preset = "ui", mask_threshold = 0.3 })
+-- hg.layer("waybar", { preset = "subtle", mask_threshold = 0.05 })
+-- hg.layer("swaync")
+-- hg.layer("quickshell:bezel", { preset = "ui", mask_threshold = 0.3 })
 hg.layer("debug-panel", { exclude = true })
 
 -- Presets
@@ -62,3 +62,5 @@ hg.preset("contrasted", {
     adaptive_dim = 1.5,
     dark = { tint_color = 0x02142aa9 },
 })
+
+

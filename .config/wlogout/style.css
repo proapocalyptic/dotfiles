@@ -4,15 +4,15 @@
 }
 
 window {
-	background-color: rgba(12, 12, 12, 0.9);
+	background-color: rgba(13, 3, 14, 0.9);
 }
 
 button {
     border-radius: 0;
-    border-color: black;
-	text-decoration-color: #FFFFFF;
-    color: #FFFFFF;
-	background-color: #1E1E1E;
+    border-color: #2e1a2a;
+	text-decoration-color: #ebdbb2;
+    color: #ebdbb2;
+	background-color: #1a0e16;
 	border-style: solid;
 	border-width: 1px;
 	background-repeat: no-repeat;
@@ -20,8 +20,8 @@ button {
 	background-size: 25%;
 }
 
-button:focus, button:active, button:hover {
-	background-color: #3700B3;
+button:active, button:hover {
+	background-color: #6E1E70;
 	outline-style: none;
 }
 
@@ -34,7 +34,7 @@ button:focus, button:active, button:hover {
 }
 
 #suspend {
-    background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+    background-image: image(url("/home/alex/.config/wlogout/logoutmenulabelor.png"), url("/home/alex/.config/wlogout/logoutmenulabelor.png"));
 }
 
 #hibernate {

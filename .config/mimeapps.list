@@ -16,6 +16,7 @@ application/x-zerosize=nvim-open.desktop
 application/pdf=okularApplication_pdf.desktop
 application/x-trash=featherpad.desktop
 application/json=jless.desktop
+x-scheme-handler/slack=slack.desktop
 
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird-CLSSP3.desktop;userapp-Thunderbird-7B21M3.desktop;

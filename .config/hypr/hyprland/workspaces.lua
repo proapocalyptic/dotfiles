@@ -4,7 +4,8 @@
 hl.config({ scrolling = { column_width = 0.8 } })
 
 -- ---- Workspace definitions ----
-hl.workspace_rule({ workspace = "1",  default_name = "TERMINAL", persistent = true, default = true,  gaps_out = 2, gaps_in = 2 })
+hl.workspace_rule({ workspace = "1",  default_name = "TERMINAL", persistent = true, default = true,  gaps_out = 2, gaps_in = 2,
+		    layout = "scrolling", layout_opts = { direction = "left" }})
 hl.workspace_rule({ workspace = "2",  default_name = "RNGR",     persistent = true,
 		    layout = "scrolling", layout_opts = { direction = "down" }} )
 
@@ -15,11 +16,14 @@ hl.workspace_rule({ workspace = "6",  default_name = "OBSDN",    persistent = tr
 hl.workspace_rule({ workspace = "7",  default_name = "MAIL",     persistent = true })
 hl.workspace_rule({ workspace = "8",  default_name = "ADMIN",	 persistent = true, gaps_out=1, gaps_in=2,
 	  	    layout = "scrolling", layout_opts = { direction = "down" }})
+hl.workspace_rule({ workspace = "9",  default_name = "TASK",     persistent = true })
 
+hl.workspace_rule ({ workspace = "10", default_name = "SPACE", persistent = false})
 
 hl.workspace_rule({ workspace = "11", default_name = "STEAM",    persistent = false })
 hl.workspace_rule({ workspace = "12", default_name = "ITCH",     persistent = false })
 hl.workspace_rule({ workspace = "13", default_name = "VLC",      persistent = false })
+
 
 -- ---- Smart gaps: no gaps on single-tiled or fullscreen ----
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
@@ -28,7 +32,6 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]"   }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]"   }, rounding = 0 })
-
 
 
 -- ---- Window → workspace routing ----
@@ -40,6 +43,7 @@ route("kitty-scratcher", "1")
 route("kitty-ranger",    "2")
 route("vivaldi-stable",  "3")
 route("firefox",         "4")
+route("librewolf",       "4")
 route("kitty-nvim",      "5")
 route("obsidian",        "6")
 route("thunderbird",     "7")
@@ -48,7 +52,6 @@ route("sysmon",          "8")
 route("steam",           "11")
 route("itch",            "12")
 route("vlc",             "13")
-route("special-terminal","special:theZone")
+route("kitty-task","9")
+route("kitty-task-vit","9")
 
--- Workspace Layouts --
-hl.workspace_rule({ workspace = "1", layout_opts = { mfact = 0.8 } })

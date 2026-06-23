@@ -1,4 +1,4 @@
-//  __  __           _       _            
+		//  __  __           _       _            
 // |  \/  | ___   __| |_   _| | ___  ___  
 // | |\/| |/ _ \ / _` | | | | |/ _ \/ __| 
 // | |  | | (_) | (_| | |_| | |  __/\__ \ 
@@ -25,15 +25,7 @@
         }       
     },
 
-    // Hyprland Window
-    //"hyprland/window": {
-      //  "rewrite": {
-        //    "(.*) - Brave": "$1",
-          //  "(.*) - Chromium": "$1",
-            // "(.*) - Brave Search": "$1",
-      //  },
-        //"separate-outputs": true
-    //},
+
 
     // Rofi Application Launcher
     "custom/appmenu": {
@@ -64,40 +56,6 @@
         "spacing": 10
     },
 
-    // Clock
-    "clock": {
-        "timezone": "America/New_York",
-	"format": "{:%I:%M %p}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
-    },
-
-    // System
-    "custom/system": {
-        "format": "\uf0a0",
-        "tooltip": false
-    },
-
-    // CPU
-    "cpu": {
-        "format": " C {usage}% ",
-        "on-click": "alacritty -e htop"
-    },
-
-    // Memory
-    "memory": {
-        "format": " M {}% ",
-        "on-click": "alacritty -e htop"
-    },
-
-    // Harddisc space used
-    "disk": {
-        "interval": 30,
-        "format": "D {percentage_used}% ",
-        "path": "/",
-        "on-click": "alacritty -e htop"
-    }, 
-
   // Network
   "network": {
     "format": "{ifname}",
@@ -111,7 +69,6 @@
     "tooltip-format-disconnected": "Disconnected",
     "max-length": 50,
 
-    "on-click-right": "~/.config/ml4w/scripts/nm-applet.sh toggle"
   },
 
 
@@ -214,6 +171,13 @@
     "exec": "~/.config/waybar/scripts/fuzzy-clock.sh",
     "interval": 30,
     "format": "{}"
-}
+},
 
+"custom/compass-rose": {
+    "tooltip": true,
+    "tooltip-format": "Compass Rose Menu",
+    "format": "󱎂",
+    "on-click-right": "~/.config/waybar/scripts/compass-menu.sh"
+
+}
 }

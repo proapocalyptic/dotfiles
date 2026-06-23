@@ -76,4 +76,4 @@ hl.window_rule({
     name = "hyprbar-on",
     match = { tag = "bars-toggle-off" },
     ["hyprbars:no_bar"] = true,
-}/)
+})

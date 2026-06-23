@@ -20,11 +20,8 @@
 @define-color textcolor1 #ebdbb2;
 @define-color textcolor2 #d5cfbe;
 @define-color iconcolor #ebdbb2;
-
 @define-color purpmed       #6E1E70;
 @define-color purpbright    #cf98c1;   /* border/glow accent */
-@define-color earth-dark #5a3828;
-@define-color purpbg-darker #2e1a2a;
 @define-color darkgold      #B8860B;
 @define-color parchment     #ebdbb2;
 
@@ -33,7 +30,7 @@
  * ----------------------------------------------------- */
 
  * {
-    font-family: "BlexMono Nerd Font Mono", sans-serif;
+    font-family: "IBM Plex Mono", "BlexMono Nerd Font Mono", sans-serif;
     border: none;
     border-radius: 0px;
 }
@@ -74,6 +71,9 @@ window#waybar {
     color: @textcolor2;
     background-color: @purpbg-darker;
     transition: all 0.1s linear;
+    box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    inset 0 0 0 3px rgba(0,0,0,.15);
     opacity: 0.8;
 }
 
@@ -84,7 +84,10 @@ window#waybar {
     transition: all 0.1s linear;
     opacity: 0.9;
     border: 1px solid rgba(212, 164, 34, 0.3);
-    box-shadow: 0 0 2px rgba(212, 164, 34, 0.3), 0 0 5px rgba(212, 164, 34, 0.1);
+    box-shadow: 0 0 2px rgba(212, 164, 34, 0.3), 
+    		0 0 5px rgba(212, 164, 34, 0.1),
+	        inset 0 1px rgba(0,0,0,.3),
+        	inset 0 0 0 2px rgba(0,0,0,.15);
 }
 
 #workspaces button:hover {
@@ -96,7 +99,7 @@ window#waybar {
 
 /* -----------------------------------------------------
  * Tooltips
- * -------------------------------------11111111111111111111*/
+ * ----------------------------------------------------- */
 tooltip {
     background-color: @backgroundlight;
     opacity:0.9;
@@ -287,7 +290,7 @@ window#waybar.empty #window {
     border: 1px solid @purpbright;
 ;
 }
-#custom-fuzzy-clock 
+
 /* -----------------------------------------------------
  * Custom Notification
  * ----------------------------------------------------- */
@@ -530,12 +533,57 @@ window#waybar.empty #window {
     color: @iconcolor;
 }
 
+/* -----------------------------------------------------
+ * Alex's own Custom Modules
+ * ----------------------------------------------------- */
+
 #custom-fuzzy-clock{
 	color: @iconcolor;
-	font-size: 20px;
+	font-family: "Cooper", serif;
+	font-feature-settings: "swsh";
+	font-size: 22px;
+	font-weight: 500;
+	letter-spacing: 1px;
 /*	background: @purpbg-darker;*/
 	opacity:0.75;
 	margin: 5px 0px 5px 0px;
 	padding: 0px 15px 0px 15px;
+}
 
+#custom-compass-rose{
+	font-size:18pt;
+        color: @textcolor1;
+	border-radius: 40px;
+	margin: 10px 10px 10px 10px;
+	padding: 0px 10px;
+	opacity:1.0;
+	background: #1c2f2f;
+	box-shadow: 0px 0px 0px 1px #B8860B, 
+		0px 0px 0px 2px #3A0F3B,
+		   0 0 0 3px alpha(@darkgold,.4),
+     		   0 0 0 1px @darkgold;
+    	border: 1px solid @purpbright;
+
+}
+
+#custom-compass-rose:hover {
+	background: #2a4f4f;
+	border-color: @parchment;
+	box-shadow: 
+	0px 0px 0px 1px #3A0F3B,
+	   0 0 0 3px alpha(@darkgold,.4),
+	   0 0 0 1px @darkgold;
+}
+
+#custom-compass-rose:active {
+	background: #3a6f6f;
+	box-shadow:
+	0 0 2px 4px @darkgold
+	border-color: @purpbright;
+}
+
+
+horizontal modules-center {
+margin-left: 10px;
+padding-left: 10px;
 }
