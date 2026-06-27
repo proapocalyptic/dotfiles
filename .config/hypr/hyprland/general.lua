@@ -20,7 +20,7 @@ hl.config({
         snap = {
             enabled = true,
             window_gap = 24,
-            monitor_gap = 9,
+            monitor_gap = 2,
         },
     },
     decoration = {
@@ -76,7 +76,7 @@ hl.curve("layerFadeOut",    { type = "bezier", points = { {0.9, 0.0},  {1.0, 1.0
 hl.animation({ leaf = "windowsIn",  enabled = true, speed = 2, bezier = "emphasizedDecel", style = "slide top" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 2, bezier = "emphasizedAccel", style = "slide top" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "emphasizedDecel", style = "slide" })
-hl.animation({ leaf = "workspaces",  enabled = true, speed = 5, bezier = "emphasizedDecel", style = "slide" })
+hl.animation({ leaf = "workspaces",  enabled = true, speed = 5, bezier = "emphasizedDecel", style = "fade" })
 -- Layer open: pure fade, slow lingering reveal (speed=4 ≈ 400 ms)
 hl.animation({ leaf = "layersIn",      enabled = true, speed = 4,  bezier = "layerFadeIn",  style = "fade" })
 -- Layer close: fast opacity snap-out (speed=2 ≈ 200 ms)

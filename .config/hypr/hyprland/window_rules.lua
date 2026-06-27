@@ -189,4 +189,13 @@ hl.window_rule({
     animation = "slide right",
 })
 
+hl.window_rule({
+    name = "hypr-quick-access",
+    match = { class = "kitty-topslide" },
+    tag = "joe",
+    float = true,
+    size = { "534", "869" },
+    move = { "996", "10" },
+    animation = "slide up",
+})
 

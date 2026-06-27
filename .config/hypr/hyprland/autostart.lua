@@ -3,13 +3,13 @@
 
 
 
-require("hyprland.plugin_dynamic_cursors")
-require("hyprland.autostart.auto-start_minor-services") --bluetooth, wallpaper, etc 
+pcall(require, "hyprland.plugin_dynamic_cursors")
+
+require("hyprland.autostart.auto-start_minor-services") --bluetooth, wallpaper,
 require("hyprland.autostart.auto-start_workspace1")
 require("hyprland.autostart.auto-start_ranger-and-thunar") --ranger and thunar for workspace RNGR
-require("hyprland.autostart.auto-start_normal-desktop")    -- all simple desktop applications with single-word launch commands
+require("hyprland/autostart/auto-start_normal-desktop")    -- all simple desktop applications with single-word launch commands
 require("hyprland.autostart.auto-start_sysmon") 	   --cli system managers for workspace ADMIN
-
 
 
 hl.on("hyprland.start", function()
@@ -24,7 +24,3 @@ hl.on("hyprland.start", function()
 
 
  end)
-
- 
-
-	

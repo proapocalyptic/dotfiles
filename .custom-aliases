@@ -29,7 +29,7 @@ alias sourcez='source /home/alex/.zshrc'
 alias xtouch='/home/alex/.local/bin/touch-and-chmod+x.sh'
 alias spreadsheet='libreoffice --calc'
 alias zshrc='nvim-open ~/.zshrc'
-alias vetiver='ssh mediaservermedia@vetiver'
+alias vetiver='mosh mediaservermedia@vetiver'
 alias drives='duf'
 alias frfx='firefox & disown'
 
@@ -51,3 +51,7 @@ alias lbin="cd ~/.local/bin;lsd"
 alias stubs="echo /usr/share/hypr/stubs/hl.meta.lua"
 alias Pictures="cd ~/Pictures"
 alias waybar-css="killall waybar && GTK_DEBUG=interactive waybar"
+alias timer="timerr"
+alias bog='bog'
+alias bkni="bikini"
+alias hoogie="woogie"

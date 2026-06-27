@@ -52,3 +52,4 @@ printf "\e]2;access-menu\a"
   # Fall back to running a script from SCRIPT_DIR
   [[ $matched -eq 0 ]] && bash "$SCRIPT_DIR/$chosen"
 done
+

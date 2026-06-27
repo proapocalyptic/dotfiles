@@ -27,3 +27,4 @@ application/x-zerosize=nvim-open.desktop;
 application/octet-stream=featherpad.desktop;
 text/html=micro.desktop;
 application/x-trash=featherpad.desktop;
+audio/flac=vlc.desktop;

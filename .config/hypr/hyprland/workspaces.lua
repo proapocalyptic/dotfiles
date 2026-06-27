@@ -5,7 +5,7 @@ hl.config({ scrolling = { column_width = 0.8 } })
 
 -- ---- Workspace definitions ----
 hl.workspace_rule({ workspace = "1",  default_name = "TERMINAL", persistent = true, default = true,  gaps_out = 2, gaps_in = 2,
-		    layout = "scrolling", layout_opts = { direction = "left" }})
+		    layout = "scrolling", layout_opts = { direction = "up" }})
 hl.workspace_rule({ workspace = "2",  default_name = "RNGR",     persistent = true,
 		    layout = "scrolling", layout_opts = { direction = "down" }} )
 
@@ -18,11 +18,14 @@ hl.workspace_rule({ workspace = "8",  default_name = "ADMIN",	 persistent = true
 	  	    layout = "scrolling", layout_opts = { direction = "down" }})
 hl.workspace_rule({ workspace = "9",  default_name = "TASK",     persistent = true })
 
-hl.workspace_rule ({ workspace = "10", default_name = "SPACE", persistent = false})
+hl.workspace_rule ({ workspace = "10", default_name = "SPACE", persistent = true})
 
 hl.workspace_rule({ workspace = "11", default_name = "STEAM",    persistent = false })
 hl.workspace_rule({ workspace = "12", default_name = "ITCH",     persistent = false })
-hl.workspace_rule({ workspace = "13", default_name = "VLC",      persistent = false })
+hl.workspace_rule({ workspace = "13", default_name = "vlc",      persistent = false })
+
+
+hl.workspace_rule({ workspace = "special",      persistent = false })
 
 
 -- ---- Smart gaps: no gaps on single-tiled or fullscreen ----
