@@ -1,20 +1,25 @@
 -- window_rules.lua — window & layer rules (was window-forms.conf)
 
 -- ---- LAYER RULES ----
-hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
-hl.layer_rule({ match = { namespace = "waybar" }, blur = true, animation = "popin"})
+hl.layer_rule({ match = { namespace = "waybar" }, blur = false, animation = "popin" })
 
 hl.layer_rule({
-	match = { namespace = "^kitty-quick-access$" }, 
-	animation = "slideup",
-	xray	= false,
-	})
+    match = { namespace = "^kitty-quick-access$" },
+    animation = "slideup",
+})
 
 hl.layer_rule({ match = { namespace = "compass-rose" },
-	        blur = true, 
-		animation = "fade",
-	})
+    blur = true,
+    animation = "fade",
+})
 
+hl.layer_rule({
+	match = { namespace = "quickshell"},
+	blur  = false,
+	above_lock = 1,
+	order = 5,
+	dim_around = true,
+})
 
 -- ---- GLOBAL DEFAULTS ----
 
@@ -32,8 +37,6 @@ hl.window_rule({
 
 
 -- ---- PINNED OVERLAYS ----
-
-
 
 hl.window_rule({
     name = "firefox-pip",
@@ -76,6 +79,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+    name = "easyeffects-window",
+    match = { class = "org.kde.easyeffects" },
+    float = true, border_size = 5, xray = true, pin = true,
+    size = { "695","835" }, move = { "829","50"},
+    opacity = "0.73", animation = "slideup",
+})
+
+hl.window_rule({
     name = "tooth-control",
     match = { class = "blueman-manager" },
     float = true, border_size = 1, pin = true,
@@ -94,12 +105,12 @@ hl.window_rule({
 })
 
 hl.window_rule({
-	name = "unique-note-obsidian",
-	match = {class = "obsidian", tag = 'quicknote' },
-	float = true,
-	size = { "60%", "25%" },
-	opacity = ".75",
-	pin = true,
+    name = "unique-note-obsidian",
+    match = { class = "obsidian", tag = "quicknote" },
+    float = true,
+    size = { "60%", "25%" },
+    opacity = ".75",
+    pin = true,
 })
 
 hl.window_rule({
@@ -172,7 +183,7 @@ hl.window_rule({ match = { class = "^kitty" }, border_size = 1, animation = "sli
 hl.window_rule({
     name = "sysmon-opacity",
     match = { class = "sysmon" },
-    opaque  = true,  
+    opaque = true,
 })
 
 hl.window_rule({ name = "firefox-opaque",  match = { class = "firefox" },        opaque = true })
@@ -191,11 +202,15 @@ hl.window_rule({
 
 hl.window_rule({
     name = "hypr-quick-access",
-    match = { class = "kitty-topslide" },
+    match = { class = "kitty-topslide"},
+    size = { "527", "871" },
+    xray = true,
+    blur = off,
     tag = "joe",
+    move = { "995", "8" },
     float = true,
-    size = { "534", "869" },
-    move = { "996", "10" },
     animation = "slide up",
 })
+
+
 

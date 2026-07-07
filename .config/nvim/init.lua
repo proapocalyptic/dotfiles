@@ -19,7 +19,11 @@ require("config.lazy")
 
 
 
+-- Stop highlighting text after column 300 (safely covers HTML/CSS tags, drops Base64 strain)
+vim.opt.synmaxcol = 300
+
 require('mini.pairs').setup({})
+
 	require('mini.cursorword').setup({})
 	require('mini.icons').setup({})
 	require('render-markdown')

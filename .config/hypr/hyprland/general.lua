@@ -45,17 +45,17 @@ hl.config({
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
         close_special_on_empty = true,
-        focus_on_activate = false,        -- VERIFY: not in stub enum, may be renamed
+        focus_on_activate = false,        -- confirmed: valid config key (hl.meta.lua:1197)
         mouse_move_enables_dpms = true,
         key_press_enables_dpms = true,
     },
     debug = {
         disable_logs = false,
     },
-    
-  xwayland = {
-    force_zero_scaling = true
-  },
+
+    xwayland = {
+        force_zero_scaling = true,
+    },
 })
 
 
@@ -76,6 +76,7 @@ hl.curve("layerFadeOut",    { type = "bezier", points = { {0.9, 0.0},  {1.0, 1.0
 hl.animation({ leaf = "windowsIn",  enabled = true, speed = 2, bezier = "emphasizedDecel", style = "slide top" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 2, bezier = "emphasizedAccel", style = "slide top" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "emphasizedDecel", style = "slide" })
+hl.animation({ leaf = "windowsMove", tag = "joe", enabled = true, speed = 4, bezier = "emphasizedDecel", style = "slide" })
 hl.animation({ leaf = "workspaces",  enabled = true, speed = 5, bezier = "emphasizedDecel", style = "fade" })
 -- Layer open: pure fade, slow lingering reveal (speed=4 ≈ 400 ms)
 hl.animation({ leaf = "layersIn",      enabled = true, speed = 4,  bezier = "layerFadeIn",  style = "fade" })
@@ -87,7 +88,6 @@ hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 2,  bezier = "lay
 hl.animation({ leaf = "fadeIn",      enabled = true, speed = 3, bezier = "emphasizedDecel" })
 hl.animation({ leaf = "fadeOut",     enabled = true, speed = 2, bezier = "emphasizedAccel" })
 hl.animation({ leaf = "border",      enabled = true, speed = 8, bezier = "spring" })
-
 
 
 
@@ -106,15 +106,4 @@ hl.config({
     }
 })
 
---Onscreen Keyboard Toggle Function
-function toggle_osk()
-    local layers = hl.get_layers({ namespace = "wvkbd" })
-    if #layers > 0 then
-        hl.exec_cmd("pkill wvkbd-deskintl")
-    else
-        hl.exec_cmd("wvkbd-deskintl")
-    end
-end
-
-hl.bind("SUPER + ALT + K", toggle_osk)
 

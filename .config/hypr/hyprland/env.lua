@@ -4,6 +4,13 @@
 hl.env("EDITOR", "/home/alex/.local/bin/nvim-open")
 hl.env("VISUAL", "/home/alex/.local/bin/nvim-open")
 
+-- Hyprland Config Directory
+-- Fallback safely to standard spec if XDG_CONFIG_HOME isn't initialized yet
+local configPath = (os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")) .. "/hypr"
+
+-- Export the variable cleanly for my scripts
+-- hl.env("HYPR_DIR", configPath)
+
 -- Path
 hl.env("PATH",
     os.getenv("HOME") .. "/.config/hypr/scripts:" ..
@@ -34,7 +41,7 @@ hl.env("QT_ENABLE_HIGHDPI_SCALING", "1")
 hl.env("QT_SCALE_FACTOR", "1.25")
 
 
--- -- App-specific 
+-- -- App-specific
 -- LibreOffice: use GTK4 backend)
 hl.env("SAL_USE_VCLPLUGIN", "gtk4")
 hl.env("YDOTOOL_SOCKET", os.getenv("XDG_RUNTIME_DIR") .. "/.ydotool_socket")

@@ -4,18 +4,18 @@
 hl.config({ scrolling = { column_width = 0.8 } })
 
 -- ---- Workspace definitions ----
-hl.workspace_rule({ workspace = "1",  default_name = "TERMINAL", persistent = true, default = true,  gaps_out = 2, gaps_in = 2,
-		    layout = "scrolling", layout_opts = { direction = "up" }})
-hl.workspace_rule({ workspace = "2",  default_name = "RNGR",     persistent = true,
-		    layout = "scrolling", layout_opts = { direction = "down" }} )
+hl.workspace_rule({ workspace = "1", default_name = "TERMINAL", persistent = true, default = true, gaps_out = 2, gaps_in = 2,
+    layout = "scrolling", layout_opts = { direction = "up" } })
+hl.workspace_rule({ workspace = "2", default_name = "RNGR", persistent = true,
+    layout = "scrolling", layout_opts = { direction = "down" } })
 
-hl.workspace_rule({ workspace = "3",  default_name = "VLDI",     persistent = true, gaps_out = 1, gaps_in = 0,})
+hl.workspace_rule({ workspace = "3", default_name = "VLDI", persistent = true, gaps_out = 1, gaps_in = 0 })
 hl.workspace_rule({ workspace = "4",  default_name = "FRFX",     persistent = true })
 hl.workspace_rule({ workspace = "5",  default_name = "NVIM",     persistent = true })
 hl.workspace_rule({ workspace = "6",  default_name = "OBSDN",    persistent = true })
 hl.workspace_rule({ workspace = "7",  default_name = "MAIL",     persistent = true })
-hl.workspace_rule({ workspace = "8",  default_name = "ADMIN",	 persistent = true, gaps_out=1, gaps_in=2,
-	  	    layout = "scrolling", layout_opts = { direction = "down" }})
+hl.workspace_rule({ workspace = "8", default_name = "ADMIN",	 gaps_out = 1, gaps_in = 2,
+    layout = "scrolling", layout_opts = { direction = "down" } })
 hl.workspace_rule({ workspace = "9",  default_name = "TASK",     persistent = true })
 
 hl.workspace_rule ({ workspace = "10", default_name = "SPACE", persistent = true})
@@ -57,4 +57,5 @@ route("itch",            "12")
 route("vlc",             "13")
 route("kitty-task","9")
 route("kitty-task-vit","9")
+route("kitty-topslide", "special:joe")
 

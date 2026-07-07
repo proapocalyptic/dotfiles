@@ -42,6 +42,8 @@ window#waybar {
     box-shadow: 0px -1rem 0px 15px rgba(0,0,0,0.5);
     color: @iconcolor;
     opacity: 0.95;
+
+    background-image: url("/home/alex/Pictures/graindient-transpp-darker2.png");
     transition-property: background-color;
     transition-duration: .5s;
 }

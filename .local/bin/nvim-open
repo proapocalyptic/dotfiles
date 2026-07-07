@@ -11,7 +11,7 @@ if [ -S /tmp/nvim.sock ]; then
     nvim --server /tmp/nvim.sock --remote-silent "$file"
 else
     rm -f /tmp/nvim.sock
-    kitty --single-instance --instance-group nvim --detach --class kitty-nvim -e nvim --listen /tmp/nvim.sock
+    kitty --single-instance --instance-group nvim --detach --class kitty-nvim --config="/home/alex/.config/kitty/kitty-nvim.conf" -e nvim --listen /tmp/nvim.sock
     while [ ! -S /tmp/nvim.sock ]; do
         sleep 0.1
     done

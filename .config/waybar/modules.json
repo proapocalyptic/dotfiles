@@ -22,8 +22,14 @@
 			"default": ""
         },
         "persistent-workspaces": {
-	     "*": 8
-        }       
+	     "*": 7
+        },
+	
+    "ignore-workspaces": [
+        "8",
+	"ADMIN"
+    ]	
+
     },
 
 

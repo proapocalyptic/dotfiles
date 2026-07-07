@@ -6,7 +6,7 @@
 hl.window_rule({
     name = "hyprbar-whitelist",
     match = { initial_title = "^(.*)$" },
-  --  ["hyprbars:no_bar"] = true,
+    ["hyprbars:no_bar"] = true,
 })
 
 hl.window_rule({
