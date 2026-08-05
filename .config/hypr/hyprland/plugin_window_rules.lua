@@ -13,7 +13,6 @@ hl.window_rule({
     name = "kde-connect",
     match = { class = "^(org.kde.kdeconnect.*)$" },
     ["hyprbars:no_bar"] = false,
-    size = { "(window_w*0.3)", "(window_h*0.3)" },
     tag = "comms",
 })
 

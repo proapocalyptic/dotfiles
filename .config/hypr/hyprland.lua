@@ -15,14 +15,14 @@ require("hyprland.window_rules")
 pcall(hl.window_rule, {
     name = "hyprbar-whitelist",
     match = { initial_title = "^(.*)$" },
-    ["hyprbars:no_bar"] = true,
+   -- ["hyprbars:no_bar"] = true,
 })
 
 -- Load plugin-dependent configs after plugins are available
 hl.timer(function()
     local hypr_dir = os.getenv("HOME") .. "/.config/hypr/hyprland"
-    pcall(dofile, hypr_dir .. "/plugins.lua")
-    pcall(dofile, hypr_dir .. "/plugin_window_rules.lua")
+--    pcall(dofile, hypr_dir .. "/plugins.lua")
+--   pcall(dofile, hypr_dir .. "/plugin_window_rules.lua")
 end, { timeout = 1500, type = "oneshot" })
 
 

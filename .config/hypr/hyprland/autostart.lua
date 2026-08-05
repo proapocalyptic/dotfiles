@@ -21,6 +21,7 @@ hl.on("hyprland.start", function()
  hl.exec_cmd([[kitty -1 --instance-group nvim --class kitty-nvim --confirm_os_window_close=1 --start-as=hidden --config="/home/alex/.config/kitty/kitty-nvim.conf"
  --config="/home/alex/.config/kitty/kitty-nvim.conf"]])
  hl.exec_cmd("TaskZone.sh")
-
+ hl.exec_cmd([[kitty --class kitty-ssh --confirm_os_window_close=1 --config /home/alex/.config/kitty/kitty-ssh.conf]])
+ 
 
  end)

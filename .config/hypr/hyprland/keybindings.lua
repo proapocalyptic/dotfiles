@@ -114,8 +114,8 @@ local workspaces = {
     { key = "S", id = 11, run = "steam"    },  -- STEAM
     { key = "I", id = 12, run = "itch"     },  -- ITCH
     { key = "L", id = 13, run = "vlc"      },  -- VLCh
-    { key = "T", id = 9, run = "TaskZone.sh"    }
-}
+    { key = "T", id = 9, run = "TaskZone.sh"    },
+    { key = "H", id = 14, run = "kitty --class kitty-ssh --config /home/alex/.config/kitty/kitty-ssh.conf" }}
 
 
 hl.bind("SUPER + SHIFT + M", hl.dsp.submap("ws-run"))
@@ -255,6 +255,5 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   l)
 --hl.bind("SUPER + SHIFT + code:49", hl.dsp.window.move({ workspace = "theZone" }))
 
 
-hl.bind("SUPER + Q", function()
-    bring_qs_front:set_enabled(not bring_qs_front:is_enabled())
-end)
+hl.bind( "SUPER + ALT + D", hl.dsp.exec_cmd('wtype "$PWD"'))
+

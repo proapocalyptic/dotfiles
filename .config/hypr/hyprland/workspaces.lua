@@ -14,7 +14,7 @@ hl.workspace_rule({ workspace = "4",  default_name = "FRFX",     persistent = tr
 hl.workspace_rule({ workspace = "5",  default_name = "NVIM",     persistent = true })
 hl.workspace_rule({ workspace = "6",  default_name = "OBSDN",    persistent = true })
 hl.workspace_rule({ workspace = "7",  default_name = "MAIL",     persistent = true })
-hl.workspace_rule({ workspace = "8", default_name = "ADMIN",	 gaps_out = 1, gaps_in = 2,
+hl.workspace_rule({ workspace = "8", default_name = "ADMIN", persistent = true, gaps_out = 1, gaps_in = 2,
     layout = "scrolling", layout_opts = { direction = "down" } })
 hl.workspace_rule({ workspace = "9",  default_name = "TASK",     persistent = true })
 
@@ -23,6 +23,8 @@ hl.workspace_rule ({ workspace = "10", default_name = "SPACE", persistent = true
 hl.workspace_rule({ workspace = "11", default_name = "STEAM",    persistent = false })
 hl.workspace_rule({ workspace = "12", default_name = "ITCH",     persistent = false })
 hl.workspace_rule({ workspace = "13", default_name = "vlc",      persistent = false })
+
+hl.workspace_rule({ workspace = "14", default_name = "SRVR",      persistent = false })
 
 
 hl.workspace_rule({ workspace = "special",      persistent = false })
@@ -55,7 +57,7 @@ route("sysmon",          "8")
 route("steam",           "11")
 route("itch",            "12")
 route("vlc",             "13")
+route("kitty-ssh","14")
 route("kitty-task","9")
 route("kitty-task-vit","9")
-route("kitty-topslide", "special:joe")
 

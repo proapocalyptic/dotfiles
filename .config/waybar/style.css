@@ -55,7 +55,7 @@ window#waybar {
 #workspaces {
     background: inherit;
     margin: 2px 18px 3px 1px;
-    font-family: 'IBM Plex Sans Condensed','BlexMono Nerd Font Mono';
+    font-family: 'IBM Plex Sans Condensed';
     padding: 1px 4px;
     border-color:black;
     font-weight: bold;
@@ -68,7 +68,7 @@ window#waybar {
 }
 
 #workspaces button {
-    padding: 2px 12px;
+    padding: 2px 8px;
     margin: 3px 6px;
     color: @textcolor2;
     background-color: @purpbg-darker;

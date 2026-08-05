@@ -177,7 +177,9 @@
 "custom/fuzzy-clock": {
     "exec": "~/.config/waybar/scripts/fuzzy-clock.sh",
     "interval": 30,
-    "format": "{}"
+    "format": "{text}",
+    "return-type": "json",
+    "tooltip": true
 },
 
 "custom/compass-rose": {

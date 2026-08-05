@@ -45,8 +45,8 @@ hl.config({
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
         close_special_on_empty = true,
-        focus_on_activate = false,        -- confirmed: valid config key (hl.meta.lua:1197)
-        mouse_move_enables_dpms = true,
+        focus_on_activate = false, 
+	mouse_move_enables_dpms = true,
         key_press_enables_dpms = true,
     },
     debug = {
@@ -77,7 +77,7 @@ hl.animation({ leaf = "windowsIn",  enabled = true, speed = 2, bezier = "emphasi
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 2, bezier = "emphasizedAccel", style = "slide top" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "emphasizedDecel", style = "slide" })
 hl.animation({ leaf = "windowsMove", tag = "joe", enabled = true, speed = 4, bezier = "emphasizedDecel", style = "slide" })
-hl.animation({ leaf = "workspaces",  enabled = true, speed = 5, bezier = "emphasizedDecel", style = "fade" })
+hl.animation({ leaf = "workspaces",  enabled = true, speed = 5, bezier = "emphasizedDecel", style = "slide" })
 -- Layer open: pure fade, slow lingering reveal (speed=4 ≈ 400 ms)
 hl.animation({ leaf = "layersIn",      enabled = true, speed = 4,  bezier = "layerFadeIn",  style = "fade" })
 -- Layer close: fast opacity snap-out (speed=2 ≈ 200 ms)

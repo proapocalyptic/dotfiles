@@ -94,6 +94,13 @@ hl.window_rule({
     move = { "958", "585" }, animation = "slideup",
 })
 
+hl.window_rule({
+    name = "kde-connect",
+    match = { class = "^org.kde.kdeconnect.app$" },
+    float = true,
+    size = { "722", "748" },
+    move = { "812", "125"},
+})
 
 -- ---- FLOATING & SIZING ----
 
@@ -167,13 +174,6 @@ hl.window_rule({
     match = { class = "^(thunar)$", title = "^Rename" },
     float = true,
 })
-
-hl.window_rule({
-    name = "nethogs-specific",
-    match = { initial_title = "nethogs" },
-    size = { "807", "285" },
-})
-
 
 -- ---- PER-APP APPEARANCE ----
 
