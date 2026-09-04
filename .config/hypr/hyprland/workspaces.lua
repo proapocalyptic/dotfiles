@@ -24,7 +24,8 @@ hl.workspace_rule({ workspace = "11", default_name = "STEAM",    persistent = fa
 hl.workspace_rule({ workspace = "12", default_name = "ITCH",     persistent = false })
 hl.workspace_rule({ workspace = "13", default_name = "vlc",      persistent = false })
 
-hl.workspace_rule({ workspace = "14", default_name = "SRVR",      persistent = false })
+hl.workspace_rule({ workspace = "14", default_name = "SRVR",      persistent = true,
+layout = "scrolling", layout_opts = { direction = "down" }})
 
 
 hl.workspace_rule({ workspace = "special",      persistent = false })
@@ -57,6 +58,7 @@ route("sysmon",          "8")
 route("steam",           "11")
 route("itch",            "12")
 route("vlc",             "13")
+route("Home Assistant Desktop",	"14")
 route("kitty-ssh","14")
 route("kitty-task","9")
 route("kitty-task-vit","9")

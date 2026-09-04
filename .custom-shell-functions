@@ -162,3 +162,8 @@ ni() {
     fi
     _icat_send_image "$img"
 }
+
+## capture screenshot
+screenshot() {
+	 grim -g "$(slurp)" - | satty --filename - --fullscreen --copy-command wl-copy
+}

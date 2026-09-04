@@ -9,15 +9,6 @@ hl.bind("SUPER + Return",   hl.dsp.exec_cmd("kitty"))
 hl.bind("SUPER + SHIFT + E", hl.dsp.exit())
 
 -- ---- Toggle On-screen Keyboard ----
-function toggle_osk()
-    local layers = hl.get_layers({ namespace = "wvkbd" })
-    if #layers > 0 then
-        hl.exec_cmd("pkill wvkbd-deskintl")
-    else
-        hl.exec_cmd("wvkbd-deskintl")
-    end
-end
-hl.bind("SUPER + ALT + K", toggle_osk)
 
 -- ---- Essential ----
 hl.bind(SUPER .. " + Z", hl.dsp.exec_cmd("kitty -1"))
@@ -39,27 +30,25 @@ hl.bind(SUPER .. " + ALT + a", function()
     local x = not hl.get_config("animations.enabled")
     hl.config({ animations = { enabled = x } })
 end)
-hl.bind(SUPER .. " + Tab", hl.dsp.window.cycle_next())
+-- hl.bind(SUPER .. " + Tab", hl.dsp.window.cycle_next())
 -- Mouse drag — confirmed by wiki Binds page:
 --   movewindow   -> hl.dsp.window.drag()
 --   resizewindow -> hl.dsp.window.resize()  (no args = drag-resize mode)
 hl.bind(SUPER .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(SUPER .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-hl.define_submap("nav-move", function()
-    -- Focus movement (WASD)
-    hl.bind("w",      hl.dsp.focus({ direction = "u" }))
-    hl.bind("a",      hl.dsp.focus({ direction = "l" }))
-    hl.bind("s",      hl.dsp.focus({ direction = "d" }))
-    hl.bind("d",      hl.dsp.focus({ direction = "r" }))
-    -- Window swap (arrow keys)
-    hl.bind("up",     hl.dsp.window.swap({ direction = "u" }))
-    hl.bind("left",   hl.dsp.window.swap({ direction = "l" }))
-    hl.bind("down",   hl.dsp.window.swap({ direction = "d" }))
-    hl.bind("right",  hl.dsp.window.swap({ direction = "r" }))
 
-    hl.bind("catchall", hl.dsp.submap("reset"))
-end)
+    -- Focus movement (WASD)
+    hl.bind(SUPER .. "+ w",      hl.dsp.focus({ direction = "u" }))
+    hl.bind(SUPER .. "+ a",      hl.dsp.focus({ direction = "l" }))
+    hl.bind(SUPER .. "+ s",      hl.dsp.focus({ direction = "d" }))
+    hl.bind(SUPER .. "+ d",      hl.dsp.focus({ direction = "r" }))
+    -- Window swap (arrow keys)
+    hl.bind(SUPER .. "+ up",     hl.dsp.window.swap({ direction = "u" }))
+    hl.bind(SUPER .. "+ left",   hl.dsp.window.swap({ direction = "l" }))
+    hl.bind(SUPER .. "+ down",   hl.dsp.window.swap({ direction = "d" }))
+    hl.bind(SUPER .. "+ right",  hl.dsp.window.swap({ direction = "r" }))
+
 
 -- ---- Workspaces ----
 -- Workspaces 1-10
@@ -115,7 +104,7 @@ local workspaces = {
     { key = "I", id = 12, run = "itch"     },  -- ITCH
     { key = "L", id = 13, run = "vlc"      },  -- VLCh
     { key = "T", id = 9, run = "TaskZone.sh"    },
-    { key = "H", id = 14, run = "kitty --class kitty-ssh --config /home/alex/.config/kitty/kitty-ssh.conf" }}
+    { key = "H", id = 14, run = "kitty --config /home/alex/.config/kitty/kitty-ssh.conf" }}
 
 
 hl.bind("SUPER + SHIFT + M", hl.dsp.submap("ws-run"))
@@ -256,4 +245,21 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   l)
 
 
 hl.bind( "SUPER + ALT + D", hl.dsp.exec_cmd('wtype "$PWD"'))
+
+if hl.plugin.hyprtasking ~= nil then
+hl.bind("SUPER + SPACE", function() 
+	hl.plugin.hyprtasking.toggle("cursor")
+end)
+
+
+
+-- escape closes the overview if it's open
+hl.bind("escape", function()
+  if hl.plugin.hyprtasking.is_active() then
+    hl.plugin.hyprtasking.toggle('all')
+  end
+end, { non_consuming = true })
+end
+
+hl.bind("SUPER + ALT + K", toggle_osk)
 

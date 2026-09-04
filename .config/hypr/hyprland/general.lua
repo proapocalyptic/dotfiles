@@ -11,7 +11,7 @@ hl.config({
                 angle = 285,
             },
             inactive_border = {
-                colors = { "rgba(ebdbb2ff)" },
+                colors = { "rgba(ebdbb266)" },
             },
         },
         resize_on_border = true,
@@ -33,7 +33,18 @@ hl.config({
             offset = { 0, 3 },
             color = "rgba(0000001a)",
         },
+	glow = {
+		enabled = true,
+		range = 7,
+		color = "rgba(cb6fa1ff)",
+
+		render_power = 4,
+		color_inactive = "rgba(5A3828ff)"
+
+	},
+
         blur = {
+
             enabled = true,
             size = 3,
             passes = 2,

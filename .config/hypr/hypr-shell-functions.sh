@@ -132,7 +132,7 @@ htag-remove() {
                 shift 2
                 ;;
             *)
-                selector=$(_hypr_window_selector "$1") || return 1
+            selector=$(_hypr_window_selector "$1") || return 1
                 shift
                 ;;
         esac
@@ -141,3 +141,5 @@ htag-remove() {
     tag="$1"
     hyprctl dispatch "hl.dsp.window.tag({ tag = [[-$tag]], window = [[$selector]] })"
 }
+
+

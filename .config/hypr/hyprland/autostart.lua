@@ -1,11 +1,5 @@
--- autostart.lua — services & startup apps (was autostart.conf)
-
-
-
-
-pcall(require, "hyprland.plugin_dynamic_cursors")
-
 require("hyprland.autostart.auto-start_minor-services") --bluetooth, wallpaper,
+require("hyprland.functions")
 require("hyprland.autostart.auto-start_workspace1")
 require("hyprland.autostart.auto-start_ranger-and-thunar") --ranger and thunar for workspace RNGR
 require("hyprland.autostart.auto-start_normal-desktop")    -- all simple desktop applications with single-word launch commands
@@ -18,10 +12,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd wayland_display xdg_current_desktop")
 
  -- nvim-server pre-launch: starts local nvim server headless in its own instance group to speed up first open.
- hl.exec_cmd([[kitty -1 --instance-group nvim --class kitty-nvim --confirm_os_window_close=1 --start-as=hidden --config="/home/alex/.config/kitty/kitty-nvim.conf"
+ hl.exec_cmd([[kitty -1 --instance-group nvim --class kitty-nvim --start-as=hidden --config="/home/alex/.config/kitty/kitty-nvim.conf"
  --config="/home/alex/.config/kitty/kitty-nvim.conf"]])
  hl.exec_cmd("TaskZone.sh")
- hl.exec_cmd([[kitty --class kitty-ssh --confirm_os_window_close=1 --config /home/alex/.config/kitty/kitty-ssh.conf]])
- 
-
+ hl.exec_cmd("kitty --class kitty-ssh --config='/home/alex/.config/kitty/kitty-ssh.conf'")
  end)
