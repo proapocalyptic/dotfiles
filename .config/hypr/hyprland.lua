@@ -10,6 +10,7 @@ require("hyprland.autostart")
 require("hyprland.keybindings")
 require("hyprland.workspaces")
 require("hyprland.window_rules")
+require("hyprland.plugins")
 
 -- Hide hyprbars early — best-effort (silently skipped on fresh boot before plugins load)
 -- pcall(hl.window_rule, {
@@ -19,10 +20,10 @@ require("hyprland.window_rules")
 --})
 
 -- Load plugin-dependent configs after plugins are available
-hl.timer(function()
-    local hypr_dir = os.getenv("HOME") .. "/.config/hypr/hyprland"
-    pcall(dofile, hypr_dir .. "/plugins.lua")
- --   pcall(dofile, hypr_dir .. "/plugin_window_rules.lua")
-end, { timeout = 1500, type = "oneshot" })
-
+-- hl.timer(function()
+--     local hypr_dir = os.getenv("HOME") .. "/.config/hypr/hyprland"
+--     pcall(dofile, hypr_dir .. "/plugins.lua")
+--  --   pcall(dofile, hypr_dir .. "/plugin_window_rules.lua")
+-- end, { timeout = 1500, type = "oneshot" })
+--
 

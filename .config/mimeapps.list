@@ -17,6 +17,7 @@ application/pdf=okularApplication_pdf.desktop
 application/x-trash=featherpad.desktop
 application/json=jless.desktop
 x-scheme-handler/slack=slack.desktop
+video/x-matroska=vlc.desktop
 
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird-CLSSP3.desktop;userapp-Thunderbird-7B21M3.desktop;
@@ -30,3 +31,4 @@ application/x-trash=featherpad.desktop;
 audio/flac=vlc.desktop;audacity.desktop;
 text/markdown=nvim-open.desktop
 application/json=nvim.desktop;
+video/x-matroska=vlc.desktop;

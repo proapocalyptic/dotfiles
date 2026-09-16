@@ -263,3 +263,9 @@ end
 
 hl.bind("SUPER + ALT + K", toggle_osk)
 
+hl.bind("SUPER + TAB", hl.plugin.gloview.toggle)
+hl.bind("SUPER + SHIFT + TAB", hl.plugin.gloview.desktop)
+hl.bind("SUPER + CTRL + TAB", hl.plugin.gloview.allworkspaces)
+
+hl.bind("SUPER + bracketright", hl.plugin.gloview.next)
+hl.bind("SUPER + bracketleft", hl.plugin.gloview.prev)

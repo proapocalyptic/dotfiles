@@ -1,0 +1,19 @@
+
+alias: "Rotary Dial: Turn On and Reset Color"
+description: "Resets color only when turning the light on from an off state"
+mode: single
+trigger:
+  - platform: state
+    entity_id: event.your_rotary_button_button # Replace with your rotary button entity
+    to: "initial_press" # Or "turn_on" depending on your button
+condition:
+  - condition: state
+    entity_id: light.rookroom_lightbulb_dresser
+    state: "off"
+action:
+  - action: light.turn_on
+    target:
+      entity_id: light.rookroom_lightbulb_dresser
+    data:
+      color_temp_kelvin: 2700
+      brightness: 255
