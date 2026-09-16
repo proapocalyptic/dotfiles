@@ -1,0 +1,63 @@
+#!/bin/bash
+# Standalone Taskwarrior task blocker helper script
+# This script creates a new task (Task B) that blocks an existing task (Task A).
+# It inherits the project from Task A and updates Task A to depend on Task B.
+
+# Verify we have at least 2 arguments: target task (ID/UUID) and new task arguments
+if [ "$#" -lt 2 ]; then
+    echo "Usage: task-block <existing-task-id-or-uuid> <new-task-arguments...>" >&2
+    echo "Example: task-block 8 \"Buy milk\" due:tomorrow +shopping" >&2
+    exit 1
+fi
+
+target_task="$1"
+shift # Shift arguments so "$@" contains only the new task's arguments
+
+# Retrieve the UUID of the target task (Task A) to ensure it exists
+target_uuid=$(task _get "$target_task.uuid" 2>/dev/null)
+if [ -z "$target_uuid" ]; then
+    echo "Error: Target task '$target_task' not found." >&2
+    exit 1
+fi
+
+# Retrieve the project of the target task (if any)
+project=$(task _get "$target_uuid.project" 2>/dev/null)
+
+# Build the task add command
+if [ -n "$project" ]; then
+    # Create Task B with the inherited project and user-specified arguments
+    output=$(task add project:"$project" "$@")
+else
+    # Create Task B without a project if Task A doesn't have one
+    output=$(task add "$@")
+fi
+
+# Print the output of the task add command to let the user see it
+echo "$output"
+
+# Extract the new task's ID from the output of 'task add'
+new_id=$(echo "$output" | grep -o -E 'Created task [0-9]+' | head -n 1 | awk '{print $3}')
+if [ -z "$new_id" ]; then
+    echo "Error: Could not extract task ID from 'task add' output." >&2
+    exit 1
+fi
+
+# Retrieve the UUID of the newly created task (Task B)
+new_uuid=$(task _get "$new_id.uuid" 2>/dev/null)
+if [ -z "$new_uuid" ]; then
+    echo "Error: Could not retrieve UUID for the new task '$new_id'." >&2
+    exit 1
+fi
+
+# Modify the target task (Task A) to depend on the new task (Task B)
+modify_output=$(task "$target_uuid" modify depends:"$new_uuid" 2>&1)
+status=$?
+
+if [ $status -eq 0 ]; then
+    # Print a clear success message indicating the relationship
+    echo "Success: Task '$target_task' (now blocked) depends on new task '$new_id'."
+else
+    echo "Error modifying task '$target_task' to depend on '$new_id':" >&2
+    echo "$modify_output" >&2
+    exit $status
+fi
