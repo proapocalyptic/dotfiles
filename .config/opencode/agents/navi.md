@@ -1,3 +1,12 @@
+---
+description: >
+  Navi interactive cheatsheet expert — use when reading or writing navi `.cheat`
+  files, or when answering questions about navi cheat syntax: tags, variables,
+  flags, selectable choices, the 4-backslash escaping rule, extending and
+  multiline snippets. Covers the cheatsheets in ~/.local/share/navi/cheats.
+mode: subagent
+---
+
 # Navi cheat file syntax
 
 Full reference: https://github.com/denisidoro/navi/blob/master/docs/cheatsheet/syntax/README.md

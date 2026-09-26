@@ -4,6 +4,10 @@
   "autoupdate": "notify",
   "instructions": ["AGENTS.md"],
   "references": {
+    "filesystem-map": {
+      "path": "~/.config/opencode/map",
+      "description": "Generated orientation digest for the whole machine (~/.config/opencode/map/overview.md) — read this first when you need to know what exists somewhere, or where something lives"
+    },
     "hyprland": {
       "path": "/usr/share/hypr/stubs",
       "description": "Hyprland Lua API stubs — use when writing or editing Hyprland Lua configuration (hl.meta.lua) for autocomplete, type info, and API reference"
@@ -50,6 +54,9 @@
       "~/.config/hypr/**": "allow",
       "~/.dotfiles/**": "allow",
       "~/src/**": "allow",
+      "~/.local/bin/**": "allow",
+      "~/.config/opencode/map/**": "allow",
+      "~/.local/share/opencode/fsmap/**": "allow",
       "*": "ask"
     }
   }

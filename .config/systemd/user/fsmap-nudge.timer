@@ -1,0 +1,12 @@
+[Unit]
+Description=Filesystem map: periodic annotation-review reminder
+
+[Timer]
+# Deliberately later than the 04:17 reindex: the index has to be current
+# before anything is worth reminding you about.
+OnCalendar=*-*-* 09:23:00
+Persistent=true
+Unit=fsmap-nudge.service
+
+[Install]
+WantedBy=timers.target

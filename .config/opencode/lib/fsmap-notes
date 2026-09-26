@@ -1,0 +1,312 @@
+#!/usr/bin/env python3
+"""
+fsmap-notes — review queue for filesystem-map annotations.
+
+The model can record a durable fact about a path (see the `fsmap` tool's
+`note` action), but it must not be able to make that fact *durable* on its
+own. So every note lands in `notes_pending` and only the user promotes it into
+`notes`. This script is the user's side of that handshake.
+
+Commands:
+  count            number of pending notes (one integer; used by the shell
+                   prompt, so it stays a single cheap query)
+  list             show the queue, oldest first, flagging overdue ones
+  review           interactive picker (fuzzel, falling back to fzf)
+  promote <id>     move a pending note into the durable map
+  reject <id> [why]  drop it, and remember the rejection so the same wrong
+                   note is not proposed again later
+  expire           sweep notes nobody claimed within EXPIRE_DAYS
+  tally            counts for the prompt/notification, including expired
+  snooze [n]       suppress reminders for n hours
+  add <path> <text>  queue a note by hand (the CLI twin of the tool action)
+  path             print the database location
+
+Why the queue exists at all: an LLM asserting "this config is dead" and that
+assertion silently becoming permanent context is exactly the failure mode
+worth engineering against. Nothing enters the durable map without a human.
+"""
+import os
+import sys
+import time
+from pathlib import Path
+
+HOME = Path.home()
+XDG_DATA = Path(os.environ.get("XDG_DATA_HOME", HOME / ".local/share"))
+XDG_STATE = Path(os.environ.get("XDG_STATE_HOME", HOME / ".local/state"))
+DB = XDG_DATA / "opencode" / "fsmap" / "index.db"
+STATE = XDG_STATE / "opencode" / "fsmap"
+SNOOZE_FILE = STATE / "snoozed_until"
+
+# A note older than this is shown with a warning. It is still promotable:
+# the flag is a nudge to look harder, not an automatic rejection.
+STALE_DAYS = 14
+# Nobody claimed it in this long, so it is retired to `rejected`. Expiry is
+# not a judgement about the note's truth, just about whether it still matters
+# to anyone; the tally surfaces the count so a wrong expiry stays visible.
+EXPIRE_DAYS = 30
+# How many pending notes before reminding. Matches the nudge threshold.
+REMIND_AT = 3
+
+
+def con():
+    """Open the index read-write, or explain how to build it."""
+    if not DB.exists():
+        sys.exit(f"fsmap-notes: no index at {DB}\n"
+                 f"  build it with: fsmap-index.py build")
+    import sqlite3
+    c = sqlite3.connect(DB)
+    c.row_factory = sqlite3.Row
+    return c
+
+
+def now():
+    return int(time.time())
+
+
+def short(p):
+    """Render an absolute path the way the user writes it. Accepts str or
+    Path, so callers can pass sqlite values or Path objects unchanged."""
+    s = str(p)
+    h = str(HOME)
+    return "~/" + s[len(h) + 1:] if s.startswith(h + "/") else s
+
+
+def age_days(ts):
+    """Age of a note in days, from an INTEGER epoch-seconds `created_at`.
+
+    `created_at` is written as an int by both writers (this CLI's `now()` and
+    the tool's `Math.floor(Date.now()/1000)`), so the common path is a plain
+    subtraction. The str fallback exists because this function is reached from
+    `list`, which is also the non-interactive fallback for the systemd nudge
+    service — a row that somehow holds a datetime string should degrade to
+    "unknown age", not raise a traceback into the journal every day.
+    """
+    try:
+        return (now() - int(ts)) / 86400
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def snoozed():
+    try:
+        return now() < int(SNOOZE_FILE.read_text().strip())
+    except (OSError, ValueError):
+        return False
+
+
+def pending(c, limit=50):
+    return c.execute(
+        "SELECT id, path, text, created_at FROM notes_pending "
+        "ORDER BY created_at LIMIT ?", (limit,)
+    ).fetchall()
+
+
+# --------------------------------------------------------------- commands
+
+def cmd_count(c, _):
+    """One integer, one query. Called from RPROMPT on every prompt render, so
+    it deliberately does no formatting, no expiry sweep and no disk reads."""
+    print(c.execute("SELECT COUNT(*) FROM notes_pending").fetchone()[0])
+
+
+def cmd_list(c, _):
+    rows = pending(c)
+    if not rows:
+        print("no pending notes — the queue is empty")
+        return
+    print(f"{len(rows)} pending note(s):\n")
+    for r in rows:
+        d = age_days(r["created_at"])
+        # Two different urgencies, labelled differently on purpose: "old" is
+        # advisory, "expires" is a deadline with a consequence. Once past the
+        # deadline the countdown would read negative, so say "expired" instead
+        # and let `expire` clean it up.
+        tag = f"  [old {d:.0f}d]" if d > STALE_DAYS else ""
+        if d > EXPIRE_DAYS:
+            tag += "  [past expiry]"
+        elif d > STALE_DAYS:
+            tag += f"  [expires in {EXPIRE_DAYS - d:.0f}d]"
+        print(f"  {r['id']:>3}  {short(r['path'])}{tag}")
+        print(f"       {r['text']}")
+    print(f"\npromote: fsmap-notes promote <id>   reject: fsmap-notes reject <id> [why]")
+
+
+def cmd_promote(c, arg):
+    if not arg:
+        sys.exit("usage: fsmap-notes promote <id>")
+    row = c.execute("SELECT * FROM notes_pending WHERE id=?", (arg,)).fetchone()
+    if not row:
+        sys.exit(f"fsmap-notes: no pending note with id {arg}")
+    # notes.promoted_at doubles as "when did this become part of the map".
+    c.execute(
+        "INSERT INTO notes(path,text,created_at,session,promoted_at) "
+        "VALUES(?,?,?,?,?)",
+        (row["path"], row["text"], row["created_at"], row["session"], now()),
+    )
+    c.execute("DELETE FROM notes_pending WHERE id=?", (arg,))
+    c.commit()
+    print(f"promoted #{arg} → durable: {short(row['path'])}: {row['text']}")
+
+
+def cmd_reject(c, arg):
+    parts = arg.split(None, 1)
+    if not parts:
+        sys.exit("usage: fsmap-notes reject <id> [reason]")
+    nid, why = parts[0], (parts[1] if len(parts) > 1 else "rejected by user")
+    row = c.execute("SELECT * FROM notes_pending WHERE id=?", (nid,)).fetchone()
+    if not row:
+        sys.exit(f"fsmap-notes: no pending note with id {nid}")
+    # Keyed on path+text so the same claim is recognisable next time even if it
+    # gets queued again in a later session with a new id.
+    c.execute("INSERT OR REPLACE INTO rejected(key,reason,at) VALUES(?,?,?)",
+              (row["path"] + "\t" + row["text"], why, now()))
+    c.execute("DELETE FROM notes_pending WHERE id=?", (nid,))
+    c.commit()
+    print(f"rejected #{nid} ({why})")
+
+
+def cmd_expire(c, _):
+    """Retire long-unclaimed notes. Reports what it did; never silent."""
+    cut = now() - EXPIRE_DAYS * 86400
+    rows = c.execute("SELECT id, path, text FROM notes_pending "
+                     "WHERE created_at < ?", (cut,)).fetchall()
+    for r in rows:
+        c.execute("INSERT OR REPLACE INTO rejected(key,reason,at) VALUES(?,?,?)",
+                  (r["path"] + "\t" + r["text"], "expired", now()))
+        c.execute("DELETE FROM notes_pending WHERE id=?", (r["id"],))
+    c.commit()
+    print(f"expired {len(rows)} note(s) unclaimed for {EXPIRE_DAYS}+d"
+          if rows else f"nothing to expire (threshold {EXPIRE_DAYS}d)")
+
+
+def cmd_tally(c, _):
+    p = c.execute("SELECT COUNT(*) FROM notes_pending").fetchone()[0]
+    d = c.execute("SELECT COUNT(*) FROM notes").fetchone()[0]
+    e = c.execute("SELECT COUNT(*) FROM rejected WHERE reason='expired'"
+                  ).fetchone()[0]
+    r = c.execute("SELECT COUNT(*) FROM rejected").fetchone()[0]
+    if snoozed():
+        print(f"0 (snoozed; {p} pending, {d} durable)")
+    else:
+        print(f"{p} pending, {d} durable"
+              + (f", {e} expired unclaimed" if e else "")
+              + (f", {r} rejected total" if r else ""))
+
+
+def cmd_snooze(c, arg):
+    STATE.mkdir(parents=True, exist_ok=True)
+    hours = float(arg) if arg else 24
+    until = now() + int(hours * 3600)
+    SNOOZE_FILE.write_text(str(until))
+    print(f"reminders snoozed for {hours:g}h "
+          f"(until {time.strftime('%Y-%m-%d %H:%M', time.localtime(until))})")
+
+
+def cmd_add(c, arg):
+    parts = arg.split(None, 1)
+    if len(parts) < 2:
+        sys.exit("usage: fsmap-notes add <path> <text>")
+    p = Path(parts[0]).expanduser()
+    if not p.exists():
+        sys.exit(f"fsmap-notes: no such path: {p}")
+    c.execute("INSERT INTO notes_pending(path,text,created_at,session) "
+              "VALUES(?,?,?,?)", (str(p), parts[1], now(), "cli"))
+    c.commit()
+    print(f"queued #{c.execute('SELECT last_insert_rowid()').fetchone()[0]}")
+
+
+def cmd_path(c, _):
+    print(DB)
+
+
+# ----------------------------------------------------------------- review
+
+def cmd_review(c, _):
+    """Walk the queue and ask about each note in turn.
+
+    This deliberately does *not* use fuzzel/fzf. A picker returns the selected
+    line verbatim, so there is no channel by which a keystroke could turn a
+    selection into a "reject" — an earlier version of this function printed a
+    "d reject" prompt and then tested the output for a 'd', which could never
+    match, silently promoting everything. Asking one plain question per note
+    has no such failure mode, needs no external dependency, and matches the
+    actual constraint: a human decides, one note at a time.
+
+    Non-interactive stdin (a timer, cron, a pipe) falls through to `list`
+    rather than hanging or guessing.
+    """
+    rows = pending(c)
+    if not rows:
+        print("nothing to review — queue is empty")
+        return
+    if not sys.stdin.isatty():
+        cmd_list(c, _)
+        return
+
+    print("Reviewing each note. [p]romote  [r]eject  [s]kip  [q]uit\n")
+    promoted = rejected = skipped = 0
+    for r in rows:
+        d = age_days(r["created_at"])
+        # Show the age prominently: a note written weeks ago describes a
+        # filesystem state that may no longer exist, so it deserves suspicion
+        # rather than trust.
+        print(f"#{r['id']}  {short(r['path'])}   ({d}d old)")
+        print(f"    {r['text']}\n")
+        while True:
+            try:
+                ans = input("  promote / reject / skip / quit? ").strip().lower()
+            except (EOFError, KeyboardInterrupt):
+                print("\nstopping — nothing further changed")
+                break
+            if ans in ("p", "promote"):
+                cmd_promote(c, str(r["id"]))
+                promoted += 1
+                break
+            if ans in ("r", "reject"):
+                why = input("  reason (why is this wrong?)? ").strip()
+                # The reason is what stops the same bad claim being proposed
+                # again in a later session, so default it to something honest
+                # rather than a bare timestamp.
+                cmd_reject(c, f"{r['id']} {why or 'rejected by user in review'}")
+                rejected += 1
+                break
+            if ans in ("s", "skip", ""):
+                skipped += 1
+                break
+            if ans in ("q", "quit"):
+                print("stopping — nothing further changed")
+                print(f"promoted {promoted}, rejected {rejected}, "
+                      f"{len(rows) - promoted - rejected} left pending")
+                return
+            print("  unrecognised — use p / r / s / q")
+    print(f"promoted {promoted}, rejected {rejected}, "
+          f"{len(rows) - promoted - rejected} left pending")
+
+
+COMMANDS = {
+    "count": cmd_count, "list": cmd_list, "review": cmd_review,
+    "promote": cmd_promote, "reject": cmd_reject, "expire": cmd_expire,
+    "tally": cmd_tally, "snooze": cmd_snooze, "add": cmd_add,
+    "path": cmd_path,
+}
+
+
+def main():
+    if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help", "help"):
+        print(__doc__.strip())
+        return 0
+    name = sys.argv[1]
+    if name not in COMMANDS:
+        sys.exit(f"fsmap-notes: unknown command {name!r}; "
+                 f"try: {', '.join(COMMANDS)}")
+    arg = " ".join(sys.argv[2:])
+    c = con()
+    try:
+        COMMANDS[name](c, arg)
+    finally:
+        c.close()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

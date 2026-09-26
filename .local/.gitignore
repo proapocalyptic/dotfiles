@@ -1,1 +1,6 @@
 opt/
+
+# fsmap index and reminder state: both are derived, and the index is a ~32M
+# SQLite file that is rebuilt in ~2.5s by the daily fsmap-index timer.
+share/opencode/fsmap/
+state/opencode/fsmap/

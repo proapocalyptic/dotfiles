@@ -1,0 +1,15 @@
+[Unit]
+Description=Filesystem map: reindex nightly
+
+[Timer]
+# Off the hour on purpose: 04:17 is arbitrary enough that it will not collide
+# with every other timer on the machine. Persistent=true means a laptop that
+# was asleep at 04:17 still reindexes on the next boot.
+OnCalendar=*-*-* 04:17:00
+Persistent=true
+# Small jitter so a fleet of machines does not all stat the same tree at once.
+RandomizedDelaySec=5m
+Unit=fsmap-index.service
+
+[Install]
+WantedBy=timers.target

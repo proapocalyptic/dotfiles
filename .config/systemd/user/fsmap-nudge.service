@@ -1,0 +1,13 @@
+[Unit]
+Description=Filesystem map: nudge about unreviewed annotations
+After=default.target
+
+[Service]
+# The reminder is the whole point of this unit, so it must never fail loudly.
+# fsmap-nudge exits 0 whether or not it notified.
+Type=oneshot
+ExecStart=%h/.config/opencode/lib/fsmap-nudge
+TimeoutStartSec=30
+
+[Install]
+WantedBy=default.target

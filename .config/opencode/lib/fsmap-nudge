@@ -1,0 +1,132 @@
+#!/usr/bin/env python3
+"""
+fsmap-nudge — desktop reminder that the annotation queue needs review.
+
+Run from the fsmap-nudge systemd timer. Three separate things have to be true
+before it says anything, and each exists to stop it becoming noise:
+
+  1. at least REMIND_AT notes are pending — one note is not a queue;
+  2. the user has not snoozed reminders (`fsmap-notes snooze`);
+  3. the notification daemon is actually running.
+
+It also expires long-unclaimed notes first, because that is a natural moment
+to do housekeeping and it keeps the queue from growing without bound.
+
+Always exits 0. A failing reminder must never turn into a failed timer run.
+"""
+import os
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+HOME = Path.home()
+XDG_DATA = Path(os.environ.get("XDG_DATA_HOME", HOME / ".local/share"))
+DB = XDG_DATA / "opencode" / "fsmap" / "index.db"
+NOTES = Path(__file__).resolve().parent / "fsmap-notes"
+
+# Below this the queue is not worth interrupting anyone for.
+REMIND_AT = 3
+# Don't re-notify more than once per this many hours, on top of the snooze.
+MIN_GAP_H = 8
+LAST_FILE = Path(os.environ.get(
+    "XDG_STATE_HOME", HOME / ".local/state")) / "opencode" / "fsmap" / "last_nudge"
+
+
+def run(*cmd):
+    """Run a helper, ignoring failure. Used for fire-and-forget housekeeping."""
+    try:
+        subprocess.run(cmd, timeout=120, capture_output=True)
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+
+def daemon_running():
+    """True if something looks like a notification daemon.
+
+    Deliberately a process-name check rather than D-Bus introspection: a
+    D-Bus call from a timer can hang or fail depending on session bus
+    availability, and a missed reminder is much better than a stuck timer.
+    """
+    for entry in Path("/proc").iterdir():
+        if not entry.name.isdigit():
+            continue
+        try:
+            comm = (entry / "comm").read_text().strip()
+        except OSError:
+            continue  # process exited between listing and reading
+        if comm in ("mako", "dunst", "hyprctl-notification-notify",
+                    "wofi", "footnotify"):
+            return comm
+    return None
+
+
+def main():
+    if not DB.exists():
+        return 0
+
+    # Housekeeping first: retire anything past its expiry while we are here.
+    run(str(NOTES), "expire")
+
+    try:
+        import sqlite3
+    except ImportError:
+        return 0
+    c = sqlite3.connect(DB)
+    pending = c.execute("SELECT COUNT(*) FROM notes_pending").fetchone()[0]
+    durable = c.execute("SELECT COUNT(*) FROM notes").fetchone()[0]
+    expired = c.execute("SELECT COUNT(*) FROM rejected WHERE reason='expired'"
+                        ).fetchone()[0]
+    c.close()
+
+    if pending < REMIND_AT:
+        return 0
+
+    # Honour an explicit snooze.
+    try:
+        if time.time() < int((LAST_FILE.parent / "snoozed_until").read_text().strip()):
+            return 0
+    except (OSError, ValueError):
+        pass
+
+    # And rate-limit, so a long-unreviewed queue does not nag every 15 minutes.
+    try:
+        if time.time() - int(LAST_FILE.read_text().strip()) < MIN_GAP_H * 3600:
+            return 0
+    except (OSError, ValueError):
+        pass
+
+    daemon = daemon_running()
+    if not daemon:
+        return 0
+
+    # Urgency tracks the queue: 3-5 notes is a nudge, 6+ is a backlog.
+    urgency = "normal" if pending < 6 else "critical"
+    summary = f"fsmap: {pending} annotations awaiting review"
+    body = f"{durable} durable so far"
+    if expired:
+        body += f", {expired} expired unclaimed"
+    body += "\nrun: fsmap-notes review   (snooze for a day: fsmap-notes snooze)"
+
+    try:
+        subprocess.run(["notify-send", "-u", urgency, "-a", "fsmap",
+                        "-i", "document-edit", summary, body], timeout=15)
+    except (OSError, subprocess.SubprocessError):
+        return 0
+
+    # Record the notification only after it was actually sent.
+    try:
+        LAST_FILE.parent.mkdir(parents=True, exist_ok=True)
+        LAST_FILE.write_text(str(int(time.time())))
+    except OSError:
+        pass
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except Exception:
+        # A reminder is never important enough to fail a timer run.
+        sys.exit(0)

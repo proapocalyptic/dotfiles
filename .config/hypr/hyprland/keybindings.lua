@@ -178,6 +178,14 @@ end)
 hl.bind(SUPER .. " + R", hl.dsp.exec_cmd("hyprlauncher"))
 hl.bind(SUPER .. " + E", hl.dsp.exec_cmd("thunar"))
 hl.bind(SUPER .. " + M", hl.dsp.exec_cmd("~/.config/waybar/scripts/compass-menu.sh"))
+-- Review unreviewed filesystem-map annotations from the desktop. The key is
+-- deliberately awkward (SUPER+ALT+SHIFT+N) to stay out of the way of the
+-- common launchers above; fsmap-notes review opens a fuzzel picker and exits
+-- silently when the queue is empty, so a misfire costs nothing.
+-- Absolute path on purpose: a Hyprland keybind does not inherit the login
+-- shell's PATH, so a bare `fsmap-notes` would not be found.
+hl.bind("SUPER + ALT + SHIFT + N",
+        hl.dsp.exec_cmd("~/.local/bin/fsmap-notes review"))
 hl.bind(SUPER .. " + K", hl.dsp.exec_cmd("ZSH_NO_HEADER=2 kitten quick-access-terminal "))
 hl.bind("SUPER + code:61", function()
     local wins = hl.get_windows({ class = "kitty-rightslide" })

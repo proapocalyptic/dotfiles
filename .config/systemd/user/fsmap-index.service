@@ -1,0 +1,16 @@
+[Unit]
+Description=Filesystem map: rebuild index and orientation digest
+After=default.target
+
+[Service]
+# oneshot like the other user units here. Absolute ExecStart because a user
+# service gets a minimal PATH that will not include ~/.local/bin.
+Type=oneshot
+ExecStart=%h/.local/bin/fsmap-index build
+ExecStart=%h/.local/bin/fsmap-index overview
+# `dua aggregate` over ~ is the slow part on a cold disk-usage cache; give it
+# room rather than letting systemd declare the run failed.
+TimeoutStartSec=600
+
+[Install]
+WantedBy=default.target
