@@ -5,7 +5,6 @@ StartLimitIntervalSec=60s
 StartLimitBurst=5
 
 [Service]
-[Service]
 Type=notify
 ExecStart=/usr/bin/rclone mount gdrive: %h/gdrive \
     --vfs-cache-mode full \
