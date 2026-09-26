@@ -2,6 +2,8 @@
 
 Use this template to dispatch an independent plan reviewer. Self-review is still the default gate — dispatch this on plans of **more than 6 tasks**, or when a single task would need more than one reviewable deliverable. See [Self-Review](SKILL.md#self-review).
 
+**If you cannot dispatch this** — because you are yourself a subagent, or for any other reason — do not perform the review in your own place. Mark the plan `**Review status:** UNREVIEWED` and hand it back. An author re-reading their own plan confirms what they already believed; the categories below are only worth running when a second pair of eyes brings different assumptions.
+
 **Purpose:** catch spec drift, boundary problems, and buildability gaps that the plan's author is blind to.
 
 **Dispatch after:** the complete plan is written, and self-review has already been run and its findings fixed.

@@ -18,6 +18,12 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 **Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 
+**The plan is a file, always.** Write it to disk even when the request sounds casual, even when the user says "keep it tight" or "just tell me what to do," and even when it feels small enough to do inline. A plan delivered only as chat text is not a plan — it cannot be reviewed, handed to a subagent, or executed task-by-task. If the user genuinely wants no document, say so explicitly and let them override; don't decide that for them.
+
+**Don't block on open questions.** If the spec is ambiguous, pick the most reasonable reading, write it into the plan as a stated assumption, and keep going. A plan delivered with two assumptions flagged and ready is more useful than a question. Reserve blocking for a decision that would invalidate the whole approach — a missing spec, or a requirement that contradicts another.
+
+**If a plan already exists at that path**, don't silently overwrite it and don't silently ignore it. Read it, then say which it is: superseded (and rewrite), still current (and leave it alone), or a different scope (and write alongside it under a distinct name).
+
 ## Scope Check
 
 If the spec covers multiple independent subsystems, it should have been split into one spec per subsystem. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
@@ -160,6 +166,8 @@ Self-review is the gate, but on a **plan of more than 6 tasks** — or any plan 
 
 Use the template in [plan-document-reviewer-prompt.md](plan-document-reviewer-prompt.md): give it the plan path and the spec path, and hold it to the calibration clause there — approve unless there are gaps that would actually stall an implementer. Don't act on stylistic suggestions.
 
+**If you genuinely cannot dispatch a reviewer, the plan is UNREVIEWED — say so in the document and in your reply. Do not review it yourself in its place.** Re-reading your own plan catches typos; it does not catch the assumption you were wrong about, which is the only thing the reviewer is for. A self-review wearing a reviewer's label is worse than no review, because it manufactures confidence. Write `**Review status:** UNREVIEWED — no independent reviewer available` at the top of the plan and let the human decide whether to proceed.
+
 ## Execution Handoff
 
 After saving the plan, offer the choice:
@@ -174,7 +182,9 @@ After saving the plan, offer the choice:
 
 **Two constraints that make either path work:**
 
-- **The primary agent owns progress tracking.** `general` subagents have full tool access *except* `todowrite`. Create a todo per task up front, and mark it complete yourself after each dispatch returns. Don't ask an implementer to tick off steps — it has no way to.
+- **The primary agent owns progress tracking.** A `general` subagent's tools are file edits, bash, read, grep, glob, web tools, and the GitHub tools — it does **not** have `todowrite`, and it does **not** have `task`. Create a todo per task up front, and mark it complete yourself after each dispatch returns. Don't ask an implementer to tick off steps; it has no way to.
 - **An implementer sees only its own task.** That is the point of a fresh context, but it means the **Interfaces** block is load-bearing: if Task 4 calls something Task 2 produces, Task 4 must state the exact name and signature. A missing Interfaces entry is a stalled implementation, not a minor doc gap.
+
+**Reviewer dispatch is the primary's job too**, for the same reason: a subagent cannot dispatch a subagent. If *you* are running as a subagent, you cannot perform an independent review — hand the plan back to the primary and say a review is required.
 
 **If a plan will be executed repeatedly**, a dedicated subagent in `~/.config/opencode/agents/plan-executor.md` (a markdown file with `mode: subagent`) makes the per-task dispatch repeatable without restating the constraints each time.
