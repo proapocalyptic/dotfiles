@@ -1,0 +1,12 @@
+[Unit]
+Description=Speaker protection guard — enforce safe ALSA levels
+After=pipewire.service wireplumber.service
+Requires=pipewire.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/alex/.local/bin/speaker-guard.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,11 @@
+# ~/.config/systemd/user/screensaver-stub.service
+[Unit]
+Description=org.freedesktop.ScreenSaver stub
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=python3 %h/.local/lib/screensaver-stub.py
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target

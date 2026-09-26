@@ -1,0 +1,21 @@
+[Unit]
+Description=rclone: Google Drive
+After=default.target
+StartLimitIntervalSec=60s
+StartLimitBurst=5
+
+[Service]
+[Service]
+Type=notify
+ExecStart=/usr/bin/rclone mount gdrive: %h/gdrive \
+    --vfs-cache-mode full \
+    --vfs-cache-max-age 24h \
+    --dir-cache-time 1000h \
+    --poll-interval 1m \
+    --buffer-size 64M
+ExecStop=/usr/bin/fusermount3 -u %h/gdrive
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target
