@@ -10,35 +10,40 @@ You run scenarios without the skill (RED - watch agent fail), write skill addres
 
 **Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill prevents the right failures.
 
-**REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill. That skill defines the fundamental RED-GREEN-REFACTOR cycle. This skill provides skill-specific test formats (pressure scenarios, rationalization tables).
+**REQUIRED BACKGROUND:** The RED-GREEN-REFACTOR cycle from TDD — write a failing test, watch it fail, write the minimal passing change, then refactor while staying green. This file provides skill-specific test formats (pressure scenarios, rationalization tables).
 
-**Complete worked example:** See examples/CLAUDE_MD_TESTING.md for a full test campaign testing CLAUDE.md documentation variants.
+**Worked example:** [Example: TDD Skill Bulletproofing](#example-tdd-skill-bulletproofing) walks a full campaign on a TDD-discipline skill — two iterations, three rationalizations, from "tests after achieve same goals" to a meta-test confirming the agent recognized the skill as clear. Read it before running your first campaign.
 
 ## When to Use
+
+The deciding question is not "is this a reference skill?" — it's **"is there a behavior here that an agent would rationalize away?"**
 
 Test skills that:
 - Enforce discipline (TDD, testing requirements)
 - Have compliance costs (time, effort, rework)
 - Could be rationalized away ("just this once")
 - Contradict immediate goals (speed over quality)
+- Encode a rule inside reference material that agents will talk themselves out of following
 
-Don't test:
-- Pure reference skills (API docs, syntax guides)
-- Skills without rules to violate
-- Skills agents have no incentive to bypass
+Skip skills that:
+- Are pure lookup material — API signatures, syntax tables, config keys — with no rule to violate
+- Have no compliance cost; the agent loses nothing by ignoring them
+- Would only ever be tested with academic questions the agent can recite
+
+A reference skill that *carries a rule* ("always pin the version, never use latest") is a discipline skill wearing reference clothes. Test it like one.
 
 ## TDD Mapping for Skill Testing
 
-| TDD Phase | Skill Testing | What You Do |
-|-----------|---------------|-------------|
-| **RED** | Baseline test | Run scenario WITHOUT skill, watch agent fail |
-| **Verify RED** | Capture rationalizations | Document exact failures verbatim |
-| **GREEN** | Write skill | Address specific baseline failures |
-| **Verify GREEN** | Pressure test | Run scenario WITH skill, verify compliance |
-| **REFACTOR** | Plug holes | Find new rationalizations, add counters |
-| **Stay GREEN** | Re-verify | Test again, ensure still compliant |
+The single reference table for this cycle. Same cycle as code TDD, different test format.
 
-Same cycle as code TDD, different test format.
+| TDD Phase | Skill Testing | What You Do | Success Criteria |
+|-----------|---------------|-------------|------------------|
+| **RED** | Baseline test | Run scenario WITHOUT skill, watch agent fail | Agent fails; you have verbatim rationalizations |
+| **Verify RED** | Capture exact wording | Document failures word-for-word | Not a summary — the actual phrases used |
+| **GREEN** | Write skill | Address the specific baseline failures | Agent now complies |
+| **Verify GREEN** | Pressure test | Re-run scenarios WITH skill | Agent follows rule under pressure |
+| **REFACTOR** | Plug holes | Find new rationalizations, add counters | Each new excuse has an explicit counter |
+| **Stay GREEN** | Re-verify | Test again | Agent still complies after refactoring |
 
 ## RED Phase: Baseline Testing (Watch It Fail)
 
@@ -139,7 +144,7 @@ Forces explicit choice.
 
 **Best tests combine 3+ pressures.**
 
-**Why this works:** See persuasion-principles.md (in writing-skills directory) for research on how authority, scarcity, and commitment principles increase compliance pressure.
+**Why this works:** See persuasion-principles.md for research on how authority, scarcity, and commitment increase susceptibility to pressure — and for the caveat that the underlying studies measured compliance with objectionable requests, not engineering discipline.
 
 ### Key Elements of Good Scenarios
 
@@ -164,6 +169,8 @@ Make agent believe it's real work, not a quiz.
 
 Agent violated rule despite having the skill? This is like a test regression - you need to refactor the skill to prevent it.
 
+**If the violation is a skipped rule or a new excuse, you're in class 1** — continue with Plugging Each Hole below. If instead the agent complied but the output was the wrong shape, missing a required element, or the behavior failed to vary with a condition, **stop.** Plugging loopholes will not help; the form is wrong. Re-check the classification table and rewrite as a recipe, a structural slot, or a conditional.
+
 **Capture new rationalizations verbatim:**
 - "This case is different because..."
 - "I'm following the spirit not the letter"
@@ -177,7 +184,9 @@ Agent violated rule despite having the skill? This is like a test regression - y
 
 ### Plugging Each Hole
 
-For each new rationalization, add:
+**Before plugging anything, classify the baseline failure** using the table in [Match the Form to the Failure](SKILL.md#match-the-form-to-the-failure). This section is **class 1 only** — an agent that knows the rule and skips it under pressure. The four techniques below are *anticipatory counters*: they forbid rationalizations. They do not constrain output shape, and for classes 2–4 they measurably backfire. If your baseline failure isn't class 1, go use the recipe, structural slot, or conditional the table points you to instead of anything on this page.
+
+For each new class-1 rationalization, add:
 
 ### 1. Explicit Negation in Rules
 
@@ -281,6 +290,8 @@ it crystal clear that Option A was the only acceptable answer?
 
 ## Example: TDD Skill Bulletproofing
 
+A TDD-discipline skill, tested end to end. Two iterations, three rationalizations.
+
 ### Initial Test (Failed)
 ```markdown
 Scenario: 200 lines done, forgot TDD, exhausted, dinner plans
@@ -303,7 +314,7 @@ Cited: New principle directly
 Meta-test: "Skill was clear, I should follow it"
 ```
 
-**Bulletproof achieved.**
+**Bulletproof achieved.** Note what iteration 1 demonstrates: a *relevant* counter ("why order matters") did nothing, because the failure wasn't missing information — it was an excuse. Only the foundational principle shut it down. Adding more content is not the same as adding the right content.
 
 ## Testing Checklist (TDD for Skills)
 
@@ -355,17 +366,6 @@ Agents resist single pressure, break under multiple.
 Tests pass once ≠ bulletproof.
 ✅ Fix: Continue REFACTOR cycle until no new rationalizations.
 
-## Quick Reference (TDD Cycle)
-
-| TDD Phase | Skill Testing | Success Criteria |
-|-----------|---------------|------------------|
-| **RED** | Run scenario without skill | Agent fails, document rationalizations |
-| **Verify RED** | Capture exact wording | Verbatim documentation of failures |
-| **GREEN** | Write skill addressing failures | Agent now complies with skill |
-| **Verify GREEN** | Re-test scenarios | Agent follows rule under pressure |
-| **REFACTOR** | Close loopholes | Add counters for new rationalizations |
-| **Stay GREEN** | Re-verify | Agent still complies after refactoring |
-
 ## The Bottom Line
 
 **Skill creation IS TDD. Same principles, same cycle, same benefits.**
@@ -376,9 +376,4 @@ RED-GREEN-REFACTOR for documentation works exactly like RED-GREEN-REFACTOR for c
 
 ## Real-World Impact
 
-From applying TDD to TDD skill itself (2025-10-03):
-- 6 RED-GREEN-REFACTOR iterations to bulletproof
-- Baseline testing revealed 10+ unique rationalizations
-- Each REFACTOR closed specific loopholes
-- Final VERIFY GREEN: 100% compliance under maximum pressure
-- Same process works for any discipline-enforcing skill
+TDD-for-skills has been applied to a TDD-discipline skill itself; the campaign log is [above](#example-tdd-skill-bulletproofing). Expect roughly half a dozen iterations and a double-digit rationalization count on a discipline skill; expect far fewer on a technique skill. The process transfers to any discipline-enforcing skill — but the *form* you pick must still be classified first.

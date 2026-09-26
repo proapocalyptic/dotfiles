@@ -4,7 +4,9 @@
 
 LLMs respond to the same persuasion principles as humans. Understanding this psychology helps you design more effective skills - not to manipulate, but to ensure critical practices are followed even under pressure.
 
-**Research foundation:** Meincke et al. (2025) tested 7 persuasion principles with N=28,000 AI conversations. Persuasion techniques more than doubled compliance rates (33% → 72%, p < .001).
+**Research foundation:** Meincke et al. (2026) tested 7 persuasion principles across N=126,000 conversations with three models. Persuasion raised compliance from 35.3% to 51.3% — a 16-point lift. Reasoning models resisted persuasion more than earlier models, though not completely.
+
+**Scope caveat — read before citing the numbers:** These studies measured compliance with *objectionable requests* (insult the user; synthesize a regulated drug), not adherence to legitimate engineering practice. Transferring the effect to "follow TDD" or "run the tests" is an extrapolation, not a measured finding. Treat the research as evidence that LLMs are *susceptible* to social influence — not as a quantified effect size for documentation discipline. A skill that cites a jailbreak study to justify compliance theater is misrepresenting it.
 
 ## The Seven Principles
 
@@ -125,7 +127,9 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 
 ## Principle Combinations by Skill Type
 
-| Skill Type | Use | Avoid |
+**These pairings are extrapolated, not measured.** Both studies varied one principle at a time against a matched control; no combination was ever tested. Treat the left column as a starting hypothesis to validate against your own baseline, not a finding.
+
+| Skill Type | Try | Avoid |
 |------------|-----|-------|
 | Discipline-enforcing | Authority + Commitment + Social Proof | Liking, Reciprocity |
 | Guidance/technique | Moderate Authority + Unity | Heavy authority |
@@ -170,18 +174,20 @@ LLMs respond to the same persuasion principles as humans. Understanding this psy
 - Seven principles of persuasion
 - Empirical foundation for influence research
 
-**Meincke, L., Shapiro, D., Duckworth, A. L., Mollick, E., Mollick, L., & Cialdini, R. (2025).** Call Me A Jerk: Persuading AI to Comply with Objectionable Requests. University of Pennsylvania.
-- Tested 7 principles with N=28,000 LLM conversations
-- Compliance increased 33% → 72% with persuasion techniques
-- Authority, commitment, scarcity most effective
-- Validates parahuman model of LLM behavior
+**Meincke, L., Shapiro, D., Duckworth, A. L., Mollick, E., Mollick, L., Van den Bulte, C., & Cialdini, R. (2026).** Persuading Large Language Models to Comply with Objectionable Requests. *PNAS*, 123(21), e2535868123. https://doi.org/10.1073/pnas.2535868123
+- Primary result: 7 principles, N=126,000 conversations, 3 models (GPT-5 mini, Claude Haiku 4.5, Gemini 3 Flash), 6 substances
+- Compliance 35.3% → 51.3% (16 percentage points)
+- Reasoning models more resistant than earlier models, still susceptible
+- **Preliminary study (superseded):** Meincke et al. (2025). *Call Me A Jerk: Persuading AI to Comply with Objectionable Requests.* SSRN 5357179. N=28,000, GPT-4o-mini only, 33.3% → 72.0% (p < .001). The "doubling" figure comes from this smaller, single-model preprint — cite it only with that scope attached.
+- Both: validates the parahuman model of LLM behavior
 
 ## Quick Reference
 
 When designing a skill, ask:
 
 1. **What type is it?** (Discipline vs. guidance vs. reference)
-2. **What behavior am I trying to change?**
-3. **Which principle(s) apply?** (Usually authority + commitment for discipline)
+2. **What behavior am I trying to change?** — and which failure class is it? (See Match the Form to the Failure in SKILL.md.)
+3. **Which principle(s) apply?** (Usually authority + commitment for discipline — a hypothesis, not a result)
 4. **Am I combining too many?** (Don't use all seven)
-5. **Is this ethical?** (Serves user's genuine interests?)
+5. **Did my baseline test actually show this failure?** If not, no principle is warranted — the no-guidance control is the arbiter.
+6. **Is this ethical?** (Serves user's genuine interests?)
