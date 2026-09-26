@@ -158,10 +158,7 @@ selected_window=$(hyprctl clients -j | jq "$windowsInfo" -r | fuzzel \
   --accept-nth=2)
 
 if [ -n "$selected_window" ]; then
-    printf "$selected_window \n"
     window_address=$(echo "$selected_window" | cut -f1)
-    echo $window_address
-echo "hl.dsp.window.kill(\"address:$window_address\")"
 hyprctl dispatch "hl.dsp.window.kill({ window = [[address:$window_address]] })"
 fi
 }
