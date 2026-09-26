@@ -72,9 +72,4 @@ echo "---"
 echo "Installed $count fonts. Updating cache..."
 fc-cache -fv "$DEST_DIR" 2>/dev/null
 echo "Done."
-You can create it with:
-cat > ~/.local/bin/install-fonts << 'SCRIPT'
-...paste above...
-SCRIPT
-chmod +x ~/.local/bin/install-fonts
-Then run install-fonts to install from the default dir, or install-fonts /some/other/path for a different source.
+

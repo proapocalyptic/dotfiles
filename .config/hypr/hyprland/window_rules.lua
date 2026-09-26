@@ -213,4 +213,23 @@ hl.window_rule({
 })
 
 
+hl.window_rule({
+    name = "filebot",
+    match = { class = "net-filebot-Main" },
+    opaque = true,
+    float = true,
+})
 
+hl.window_rule({
+    name = "select-folder",
+    match = { title = "Select Folder" },
+    opaque = true,
+    float = true,
+})
+
+hl.window_rule({
+    name = "select-file",
+    match = { title = "Select File" },
+    opaque = true,
+    float = true,
+})

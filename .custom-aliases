@@ -59,3 +59,4 @@ alias bat='batcat'
 alias sysctl='sudo systemctl'
 alias shiftworkspace="/home/alex/.config/hypr/scripts/move-active-window.sh"
 alias opopanax='mosh alex@193.168.135.141'
+alias picard='GTK_SCALE=1 picard'

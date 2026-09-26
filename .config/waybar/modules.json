@@ -60,7 +60,7 @@
     // System tray
     "tray": {
         "icon-size": 25,
-        "spacing": 10
+        "spacing": 5
     },
 
   // Network

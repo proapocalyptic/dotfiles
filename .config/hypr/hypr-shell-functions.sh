@@ -142,4 +142,26 @@ htag-remove() {
     hyprctl dispatch "hl.dsp.window.tag({ tag = [[-$tag]], window = [[$selector]] })"
 }
 
+#  hkill = list windows, select one then kill window by ID 
+#  ---------------------------------------------------------------------------
 
+hkill(){
+windowsInfo='sort_by(.workspace.id) | .[] | (.workspace.id|tostring) + " | " + .initialClass + " - " +.title + "\t" + .address'
+selected_window=$(hyprctl clients -j | jq "$windowsInfo" -r | fuzzel \
+ --dmenu \
+ --namespace=hkill-picker \
+  --prompt=' ' \
+  --width=50 \
+  --lines=5 \
+  --line-height=30 \
+  --with-nth=1 \
+  --accept-nth=2)
+
+if [ -n "$selected_window" ]; then
+    printf "$selected_window \n"
+    window_address=$(echo "$selected_window" | cut -f1)
+    echo $window_address
+echo "hl.dsp.window.kill(\"address:$window_address\")"
+hyprctl dispatch "hl.dsp.window.kill({ window = [[address:$window_address]] })"
+fi
+}

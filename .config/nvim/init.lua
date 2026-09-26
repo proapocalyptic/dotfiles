@@ -48,22 +48,29 @@ vim.lsp.log.set_level("error")
 
 
 
--- 1. Automatically close and discard Oil buffers on switch away
-local oil_group = vim.api.nvim_create_augroup("OilBufferlineFix", { clear = true })
+-- Allow closing Neovim or Oil windows gracefully without blocking on unsaved Oil buffers
+local oil_group = vim.api.nvim_create_augroup("OilGracefulQuit", { clear = true })
 
-vim.api.nvim_create_autocmd("FileType", {
+-- When quitting Neovim, mark all oil buffers as unmodified so Neovim exits cleanly without error
+vim.api.nvim_create_autocmd("ExitPre", {
   group = oil_group,
-  pattern = "oil",
-  callback = function(args)
-    vim.opt_local.bufhidden = "delete"
+  callback = function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].filetype == "oil" then
+        vim.bo[buf].modified = false
+      end
+    end
+  end,
+})
 
-    vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
-      group = oil_group,
-      buffer = args.buf,
-      callback = function()
-        vim.bo[args.buf].modified = false
-      end,
-    })
+-- When closing an oil window with :q, mark it unmodified so it closes without error
+vim.api.nvim_create_autocmd("QuitPre", {
+  group = oil_group,
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    if vim.bo[buf].filetype == "oil" then
+      vim.bo[buf].modified = false
+    end
   end,
 })
 
