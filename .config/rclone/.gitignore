@@ -1,0 +1,4 @@
+# rclone.conf holds live Google Drive OAuth credentials: client_id,
+# client_secret and token. It is mode 600 and untracked, and this dotfiles repo
+# is public on GitHub, so pin it here rather than relying on the mode alone.
+rclone.conf
