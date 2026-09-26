@@ -1,0 +1,4 @@
+# Sourced near the top of .zshrc. Holds personal values and credentials, so it
+# is deliberately never tracked: this repo is published publicly on GitHub.
+# A tracked template, .personal-shell-variables.example, documents what belongs here.
+.personal-shell-variables

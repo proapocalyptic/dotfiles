@@ -1,0 +1,17 @@
+# Template for ~/.personal-shell-variables, which is sourced from .zshrc.
+#
+# The real file is NOT tracked (see .gitignore) because this dotfiles repo is
+# public on GitHub. Copy this to ~/.personal-shell-variables, fill in the
+# values, and keep it at mode 600:
+#
+#     cp ~/.personal-shell-variables.example ~/.personal-shell-variables
+#     chmod 600 ~/.personal-shell-variables
+#
+# Anything assigned here must be `export`ed if a child process needs it.
+
+# GitHub personal access token. Read by the github MCP server, which is
+# configured in .config/opencode/opencode.jsonc as
+#   "Authorization": "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+# The token needs the `repo` and `read:org` scopes; a fine-grained token
+# limited to the repos you actually ask about is better still.
+export GITHUB_PERSONAL_ACCESS_TOKEN=""
